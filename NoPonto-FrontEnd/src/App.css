@@ -1,6 +1,56 @@
-#root {
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+} */
+/* :root {
+  --border-color: #e1e2e2;
+  --header-height-dt: 188px;
+  --header-height-mb: 100px;
+  --color-accent: #266847;
+  --color-accent-2: #6bb335;
+  --color-accent-3: #abd920;
+  --color-body-text: #143324;
+  --color-heading-text: #143324;
+  --color-background-dark: #003541;
+  --color-background-light: #E5E5E5;
+  --color-border: #7bcba4;
+  --border-color: #d4d4d4;
+  --colorWhite: #fff;
+  --colorWhiteOpaque: rgba(255,255,255, 0.1);
+  --colorTransparent: transparent;
+  --colorBlack: #1D1D1D;
+  --colorDarkGreen: #143324;
+  --colorMidGreen: #296647;
+  --colorMidGreenOpaque: rgba(41,102,71,0.1);
+  --colorAltGreen: #3d7458;
+  --colorGreen: #69B236;
+  --colorLightGreen: #ABD921;
+  --colorLightGreenOpaque: rgba(171, 217, 32, 0.2);
+  --colorBeige: #F1EFE7;
+  --colorMidGrey: #646665;
+  --colorLightGrey: #C8CCCA;
+  --colorLightGrey2: #F5F5F5;
+  --colorLightGrey3: #A5A5A5;
+  --colorDarkBeige: #E4DBC4;
+  --colorGreyOpaque: rgba(41, 102, 71, 0.2);
+} */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+input,
+button {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  color: var(--title-color);
+  font-family: 'Ubuntu', sans-serif;
 }
