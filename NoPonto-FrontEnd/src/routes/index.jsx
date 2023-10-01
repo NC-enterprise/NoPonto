@@ -6,7 +6,6 @@ import {
   import Navbar from '../components/Navbar';
   import Footer from '../components/Footer';
   import point from './point';
-
   
   const routes = [{
     path: '',
