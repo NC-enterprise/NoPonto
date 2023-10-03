@@ -1,6 +1,6 @@
 import { ClockIcon, PhoneIcon, HomeIcon, DevicePhoneMobileIcon, LightBulbIcon, NewspaperIcon, Battery0Icon  } from '@heroicons/react/24/solid'
 
-export default function CardPoint() {
+export default function CardPoint({ point }) {
   return (
     <div className="rounded overflow-hidden shadow-lg">
     <img
@@ -9,23 +9,20 @@ export default function CardPoint() {
       alt="" />
     <div className="px-8 py-6 mb-2">
       <div className="font-bold text-xl mb-4">
-        <h3>Recicla Tudo</h3>
+        <h3>{point.nome}</h3>
       </div>
 
       <div className='text-base flex items-center gap-1'>
         <ClockIcon className='w-3 h-3' />
-        <span> Horário: 09:00 às 18:00</span>
+        <span>{point.horarioFuncionamento}</span>
       </div>
       <div className='text-base flex items-center gap-1'>
         <PhoneIcon className='w-3 h-3' />
-        <span> Telefone: (11) 97865-4321</span>
+        <span> Telefone: {point.telefone}</span>
       </div>
       <div className='text-base flex items-center gap-1'>
         <HomeIcon className='w-5 h-5' />
-        <span> End:
-          São Paulo - São Paulo
-          Avenida Principal, Morumbi
-          Nº 736</span>
+        <span>{point.endereco}</span>
       </div>
       <div className='mt-5 text-base flex items-center gap-1'>
         <DevicePhoneMobileIcon className='mr-2 w-8 h-8' />
