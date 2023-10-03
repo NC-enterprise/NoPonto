@@ -2,10 +2,11 @@ import {
     createBrowserRouter, Outlet, RouterProvider,
   } from 'react-router-dom';
   // import login from './login';
-  import home from './home';
-  import Navbar from '../components/Navbar';
-  import Footer from '../components/Footer';
-  import point from './point';
+import home from './home';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import point from './point';
+import pointRegistration from './pointRegistration';
   
   const routes = [{
     path: '',
@@ -19,6 +20,7 @@ import {
     children: [
       ...home,
       ...point,
+      ...pointRegistration
     ],
   }];
   

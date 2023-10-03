@@ -12,7 +12,11 @@ const Section = () => {
           <p>
           Com nossa plataforma, você pode cadastrar pontos de coleta de forma eficiente e descomplicada. Ajude a preservar o meio ambiente incentivando o descarte consciente.
           </p>
-          <button className='bg-colorAccent text-white hover:bg-colorDarkGreen w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>Comece agora</button>
+          <a href='/pointRegistration'>
+          <button className='bg-colorAccent text-white hover:bg-colorDarkGreen w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>
+            Comece agora
+          </button>
+          </a>
         </div>
       </div>
     </div>
