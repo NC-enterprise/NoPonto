@@ -3,49 +3,49 @@ import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
 export default function PointRegistration() {
     const [formData, setFormData] = useState({
-        nome: "",
-        endereco: "",
-        latitude: "",
-        longitude: "",
-        horarioFuncionamento: "",
-        materiaisAceitos: [],
-        instrucoesTriagem: "",
-        responsavel: "",
-        telefone: "",
-        email: "",
-        website: "",
+        nome: "aaa",
+        endereco: "aaa",
+        latitude: "123",
+        longitude: "123",
+        horarioFuncionamento: "12344",
+        materiaisAceitos: ['papel', 'baterias'],
+        instrucoesTriagem: "aaa",
+        responsavel: "aaa",
+        telefone: "aaa",
+        email: "aaa@gmail.com",
+        website: "aa",
         ativo: false,
-        equipamentos: [],
-        parcerias: [],
-        imagens: [],
-        status: "",
-        licenca: "",
-        manutencoes: [],
+        equipamentos: ['todos', 'os', 'possiveis'],
+        parcerias: ['mercadinho', 'da', 'esquina'],
+        imagens: ['sem','imagem'],
+        status: "a",
+        licenca: "a",
+        manutencoes: ['foram','feitas'],
     });
+    const [mensage, setMensagem] = useState(String)
 
 
     const handlePointRegistration = async () => {
-        const ponto = {
-            formData,
-        };
         try {
             const resposta = await fetch("http://localhost:8080/api/v1/pontos", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(ponto)
+                body: JSON.stringify(formData)
+                
             });
+            console.log('ponto')
             if (!resposta.ok) {
                 throw new Error("Erro ao cadastrar o ponto.");
             }
             setMensagem("Ponto cadastrado com sucesso!");
         } catch (error) {
-            setMensagem(
-                "Erro ao cadastrar o ponto. Verifique os dados informados."
-            );
+            setMensagem(`${error} Erro ao cadastrar o ponto. Verifique os dados informados`);
         }
     };
+
+    console.log(mensage)
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -119,18 +119,6 @@ export default function PointRegistration() {
                                     />
                                 </div>
                             </div>
-                            {/* Imagem: 
-                            esse aqui foi o que tu fez, ele não deixa fazer upload
-                            <div>
-                                <label htmlFor="imagens">Imagens:</label>
-                                <input
-                                    type="text"
-                                    id="imagens"
-                                    name="imagens"
-                                    value={formData.imagens.join(', ')} // Transforme o array em uma string para exibição
-                                    onChange={handleInputChange}
-                                />
-                            </div>*/}
                             <div className="col-span-full">
                                 <label
                                     htmlFor="imagens"
@@ -236,7 +224,7 @@ export default function PointRegistration() {
                                         type="text"
                                         id="materiaisAceitos"
                                         name="materiaisAceitos"
-                                        value={formData.materiaisAceitos.join(', ')} // Transforme o array em uma string para exibição
+                                        value={formData.materiaisAceitos}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
                                     />
@@ -363,7 +351,7 @@ export default function PointRegistration() {
                                         type="text"
                                         id="manutencoes"
                                         name="manutencoes"
-                                        value={formData.manutencoes.join(', ')} // Transforme o array em uma string para exibição
+                                        value={formData.manutencoes}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
                                     />
@@ -381,7 +369,7 @@ export default function PointRegistration() {
                                         type="text"
                                         id="equipamentos"
                                         name="equipamentos"
-                                        value={formData.equipamentos.join(', ')} // Transforme o array em uma string para exibição
+                                        value={formData.equipamentos}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
                                     />
@@ -399,7 +387,7 @@ export default function PointRegistration() {
                                         type="text"
                                         id="parcerias"
                                         name="parcerias"
-                                        value={formData.parcerias.join(', ')} // Transforme o array em uma string para exibição
+                                        value={formData.parcerias}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
                                     />
@@ -445,7 +433,7 @@ export default function PointRegistration() {
                         Cancelar
                     </button>
                     <button
-                        onClick={() => console.log(formData)}
+                        onClick={() => handlePointRegistration(formData)}
                         className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark"
                     >
                         Salvar

@@ -33,9 +33,9 @@ public class PointService implements IPointService {
     }
 
     @Override
-    public Optional<Point> cadastrar(Point pontoDeColeta) {
+    public Optional<Point> cadastrar(Point ponto) {
         logger.info(">>>>>> servico cadastrar produto iniciado ");
-        return Optional.ofNullable(repository.save(pontoDeColeta));
+        return Optional.ofNullable(repository.save(ponto));
     }
 
     @Override

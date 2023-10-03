@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.fatec.noPontoBackend.model.Point;
-import com.fatec.noPontoBackend.service.IPointService;
 
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ public class APIPointController {
 
     @CrossOrigin
     @PostMapping
-    public ResponseEntity<Object> cadatrarPonto(@RequestBody Point p){
+    public ResponseEntity<Object> cadatrar(@RequestBody Point p){
         logger.info(">>>>>> apicontroller cadastrar ponto iniciado");
         Optional<Point>ponto=pointService.cadastrar(p);
         return ResponseEntity.status(HttpStatus.CREATED).body(ponto.get());
