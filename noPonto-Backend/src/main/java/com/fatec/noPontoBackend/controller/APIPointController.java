@@ -1,6 +1,5 @@
 package com.fatec.noPontoBackend.controller;
 
-import com.fatec.noPontoBackend.service.IPointService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ public class APIPointController {
     }
 
     @CrossOrigin
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<Object> cadatrarPonto(@RequestBody Point p){
         logger.info(">>>>>> apicontroller cadastrar ponto iniciado");
         Optional<Point>ponto=pointService.cadastrar(p);
