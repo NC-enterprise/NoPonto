@@ -17,7 +17,7 @@ export default function Navbar() {
                 {/* Logo */}
                 <div className='font-bold text-2xl cursor-pointer flex items-center gap-1'>
                     <CursorArrowRaysIcon className='w-7 h-7 text-colorDarkGreen' />
-                    <span>NoPonto</span>
+                    <span>No Ponto</span>
                 </div>
                 {/* Icon - Mobile */}
                 <div onClick={() => setOpen(!open)} className='absolute right-8 top-6 cursor-pointer md:hidden w-7 h-7 z-50'>

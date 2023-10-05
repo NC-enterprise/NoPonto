@@ -1,7 +1,8 @@
 import {
     createBrowserRouter, Outlet, RouterProvider,
   } from 'react-router-dom';
-  // import login from './login';
+import login from './login';
+import signUp from './signUp';
 import home from './home';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -32,7 +33,8 @@ import pointRegistration from './pointRegistration';
           <Outlet />
         ),
         children: [
-          // ...login,
+          ...login,
+          ...signUp,
           ...routes,
         ],
       },
