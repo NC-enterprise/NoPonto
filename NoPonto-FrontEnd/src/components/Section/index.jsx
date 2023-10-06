@@ -1,11 +1,9 @@
 import React from 'react';
-import Search from '../../assets/undraw_search_engines.svg';
 import { Link } from 'react-router-dom';
 
 const Section = () => {
   return (
     <div className='max-w-[1400px] m-auto py-16 px-4 grid lg:grid-cols-2 gap-4'>
-      {/* Left Side */}
       <div className='grid grid-cols-2 grid-rows-6 h-[80vh]'>
         <img
           className='row-span-3 object-cover w-full h-full p-2'

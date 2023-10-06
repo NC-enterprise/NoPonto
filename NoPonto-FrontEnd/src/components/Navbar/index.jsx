@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CursorArrowRaysIcon, Bars3BottomRightIcon, XMarkIcon } from '@heroicons/react/24/solid'
+import { Link } from 'react-router-dom';
 
 
 export default function Navbar() {
@@ -34,7 +35,9 @@ export default function Navbar() {
                             </a>
                         </li>
                     ))}
-                    <button className='btn bg-colorDarkGreen text-white md:ml-8 font-semibold px-3 py-1 rounded duration-500 md:static'>Sign up</button>
+                    <Link to="/signup">
+                        <button className='btn bg-colorDarkGreen text-white md:ml-8 font-semibold px-3 py-1 rounded duration-500 md:static'>Sign up</button>
+                    </Link>
                 </ul>
             </div>
         </div>
