@@ -1,22 +1,45 @@
 import React from 'react';
 import Search from '../../assets/undraw_search_engines.svg';
+import { Link } from 'react-router-dom';
 
 const Section = () => {
   return (
-    <div className='w-full bg-white py-20 px-8'>
-      <div className='max-w-[1440px] mx-auto grid md:grid-cols-2'>
-        <img className='w-[500px] mx-auto my-4 pr-8' src={Search} alt='/' />
-        <div className='flex flex-col justify-center'>
-          <p className='text-colorMidGreen font-bold '>CADASTRE PONTOS DE COLETA</p>
-          <h1 className='md:text-4xl sm:text-3xl text-2xl font-bold py-2'>Gerencie seus pontos de coleta de forma centralizada</h1>
-          <p>
+    <div className='max-w-[1400px] m-auto py-16 px-4 grid lg:grid-cols-2 gap-4'>
+      {/* Left Side */}
+      <div className='grid grid-cols-2 grid-rows-6 h-[80vh]'>
+        <img
+          className='row-span-3 object-cover w-full h-full p-2'
+          src='https://images.pexels.com/photos/1933386/pexels-photo-1933386.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+          alt='/'
+        />
+
+        <img
+          className='row-span-2 object-cover w-full h-full p-2'
+          src='https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+          alt='/'
+        />
+        <img
+          className='row-span-3 object-cover w-full h-full p-2'
+          src='https://images.pexels.com/photos/6995378/pexels-photo-6995378.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+          alt='/'
+        />
+        <img
+          className='row-span-2 object-cover w-full h-full p-2'
+          src='https://images.pexels.com/photos/3850512/pexels-photo-3850512.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+          alt='/'
+        />
+      </div>
+      <div className='flex flex-col h-full justify-center'>
+        <h3 className='text-5xl md:text-6xl font-bold mb-5'>Cadastre pontos de coleta</h3>
+        <p className='pb-6 mt-5 text-lg'>
           Com nossa plataforma, você pode cadastrar pontos de coleta de forma eficiente e descomplicada. Ajude a preservar o meio ambiente incentivando o descarte consciente.
-          </p>
-          <a href='/pointRegistration'>
-          <button className='bg-colorAccent text-white hover:bg-colorDarkGreen w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>
-            Comece agora
-          </button>
-          </a>
+        </p>
+        <div>
+          <Link to="/pointRegistration">
+            <button className='mr-4 hover:shadow-xl bg-colorAccent text-white hover:bg-colorDarkGreen w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>
+              Cadastre agora
+            </button>
+          </Link>
         </div>
       </div>
     </div>
