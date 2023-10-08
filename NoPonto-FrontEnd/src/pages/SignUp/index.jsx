@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function SignUp() {
   return (
@@ -8,11 +9,15 @@ function SignUp() {
           <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-12 bg-no-repeat bg-cover bg-center bg-colorMidGreen">
             <h1 className="text-white text-3xl mb-5">Bem-vindo!</h1>
             <div>
-              <p className="text-white">Se você já possui uma conta, faça <a href="#" className="text-colorAccent3 font-semibold">login</a> agora para acessar todos os recursos e benefícios exclusivos.</p>
+              <p className="text-white">Se você já possui uma conta, faça{' '}   
+              <Link to="/login" className="text-colorAccent3 font-semibold">
+              login
+              </Link>{' '}
+              agora para acessar todos os recursos e benefícios exclusivos.</p>
             </div>
           </div>
           <div className="w-full lg:w-1/2 py-16 px-12">
-            <h2 className="text-3xl mb-4">Sign Up</h2>
+            <h2 className="text-3xl mb-4">Cadastre-se</h2>
             <p className="mb-4">
               Crie sua conta. É grátis e leva apenas um minuto.
             </p>
