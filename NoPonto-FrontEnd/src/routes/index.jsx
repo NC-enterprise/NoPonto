@@ -7,7 +7,7 @@ import home from './home';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import point from './point';
-import pointRegistration from './pointRegistration';
+import Registration from './registration';
   
   const routes = [{
     path: '',
@@ -21,7 +21,7 @@ import pointRegistration from './pointRegistration';
     children: [
       ...home,
       ...point,
-      ...pointRegistration
+      ...Registration
     ],
   }];
   
