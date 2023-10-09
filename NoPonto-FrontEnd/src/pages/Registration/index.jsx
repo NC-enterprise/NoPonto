@@ -34,7 +34,7 @@ export default function Registration() {
       case 'marcaParceira':
         return <PartnerBrand />;
       default:
-        return 'foo';
+        return 'Selecione um dos itens acima';
     }
   }
 
@@ -174,15 +174,20 @@ export default function Registration() {
               </div>
             </div>
             <h2 className="mt-8 mb-4 text-2xl leading-8 font-bold">Qual tipo de cadastro deseja fazer:</h2>
+            {/* Radio Input:*/}
             <div className="flex gap-10 mb-14">
 
-              <input id="point" className="text-sm font-semibold"
-              onClick={() => setTipoCadastro("pontoColeta")} type="radio" name="status" checked />
-              <label htmlFor="point" >Ponto de Coleta</label>
+              <div>
+                <input id="point" className="text-sm font-semibold mr-3 cursor-pointer"
+                  onClick={() => setTipoCadastro("pontoColeta")} type="radio" name="status" checked />
+                <label htmlFor="point" >Ponto de Coleta</label>
+              </div>
 
-              <input id="brand" className="text-sm font-semibold"
-              onClick={() => setTipoCadastro("marcaParceira")} type="radio" name="status" />
-              <label htmlFor="brand" >Marca Parceira</label>
+              <div>
+                <input id="brand" className="text-sm font-semibold mr-3 cursor-pointer"
+                  onClick={() => setTipoCadastro("marcaParceira")} type="radio" name="status" />
+                <label htmlFor="brand" >Marca Parceira</label>
+              </div>
             </div>
 
             {/*carregar compoente*/}

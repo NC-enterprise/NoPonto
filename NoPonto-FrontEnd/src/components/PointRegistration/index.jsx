@@ -34,7 +34,7 @@ function PointRegistration() {
     return (
         <div className="border-t border-gray-900/10 pb-12">
             <h2 className="mt-3 text-xl font-semibold leading-7">
-                Informações do Local
+                Informações do Ponto de Coleta - Local
             </h2>
 
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
