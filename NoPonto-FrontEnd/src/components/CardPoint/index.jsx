@@ -7,24 +7,24 @@ export default function CardPoint({ point }) {
       className="w-full"
       src="https://images.pexels.com/photos/761297/pexels-photo-761297.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
       alt="" />
-    <div className="px-8 py-6 mb-2">
+    <div className="px-4 py-6 mb-2">
       <div className="font-bold text-xl mb-4">
         <h3>{point.nome}</h3>
       </div>
 
-      <div className='text-base flex items-center gap-1'>
+      <div className='text-sm	flex items-center gap-1'>
         <ClockIcon className='w-3 h-3' />
         <span>{point.horarioFuncionamento}</span>
       </div>
-      <div className='text-base flex items-center gap-1'>
+      <div className='text-sm	flex items-center gap-1 mt-2 mb-2'>
         <PhoneIcon className='w-3 h-3' />
         <span> Telefone: {point.telefone}</span>
       </div>
-      <div className='text-base flex items-center gap-1'>
+      <div className='text-sm	flex items-center gap-1'>
         <HomeIcon className='w-5 h-5' />
         <span>{point.endereco}</span>
       </div>
-      <div className='mt-5 text-base flex items-center gap-1'>
+      <div className='mt-5 text-sm flex items-center gap-1'>
         <DevicePhoneMobileIcon className='mr-2 w-8 h-8' />
         <LightBulbIcon className='mr-2 w-8 h-8' />
         <NewspaperIcon className='mr-2 w-8 h-8' />
