@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-function PointRegistration() {
+function PointRegistration( {onData} ) {
     const [formData, setFormData] = useState({
         nome: "Ponto de Coleta 5",
         endereco: "Rua da Reciclagem, 123",
@@ -22,7 +22,9 @@ function PointRegistration() {
         historicoManutencao: ["Manutenção 1", "Manutenção 2"],
     });
 
-
+    useEffect(() => {
+        onData(formData);
+      }, [onData]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;

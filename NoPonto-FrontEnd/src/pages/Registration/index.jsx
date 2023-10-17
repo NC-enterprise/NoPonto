@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import PartnerBrand from "../../components/PartnerBrand";
-import PointRegistration from "../../components/PointRegistration";
+import PointRegistration from "../../components/PointRegistration/index";
+// import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 export default function Registration() {
   const [formData, setFormData] = useState({
@@ -24,21 +25,28 @@ export default function Registration() {
     licencaAutorizacao: "Licença XYZ-12345",
     historicoManutencao: ["Manutenção 1", "Manutenção 2"],
   });
+  const [mensage, setMensagem] = useState(String);
 
   const [tipoCadastro, setTipoCadastro] = useState(String);
+  const [dataFromChild, setDataFromChild] = useState(null);
+
+  console.log(dataFromChild);
 
   const renderSwitch = (tipo) => {
     switch (tipo) {
-      case 'pontoColeta':
-        return <PointRegistration />;
-      case 'marcaParceira':
+      case "pontoColeta":
+        return <PointRegistration onData={handleDataFromChild} />;
+      case "marcaParceira":
         return <PartnerBrand />;
       default:
-        return 'Selecione um dos itens acima';
+        return "Selecione um dos itens acima";
     }
-  }
+  };
 
-  const [mensage, setMensagem] = useState(String);
+  const handleDataFromChild = (data) => {
+    setDataFromChild(data);
+  };
+
 
   const handlePointRegistration = async () => {
     const ponto = formData;
@@ -71,6 +79,8 @@ export default function Registration() {
       [name]: value,
     });
   };
+
+  const position = [51.505, -0.09]
 
   return (
     <div className="mx-auto max-w-screen-md sm:py-44 lg:py-46 text-colorMidGreen">
@@ -172,27 +182,63 @@ export default function Registration() {
                   </div>
                 </div>
               </div>
+
+              {/* Endereço:*/}
+              <div className="col-span-full">
+                <label
+                  htmlFor="endereço"
+                  className="block text-base font-medium leading-6"
+                >
+                  Endereço:
+                </label>
+                {/* <MapContainer
+                  center={position}
+                  zoom={13}
+                  scrollWheelZoom={false}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <Marker position={position}>
+                    <Popup>
+                      A pretty CSS3 popup. <br /> Easily customizable.
+                    </Popup>
+                  </Marker>
+                </MapContainer> */}
+              </div>
             </div>
-            <h2 className="mt-8 mb-4 text-2xl leading-8 font-bold">Qual tipo de cadastro deseja fazer:</h2>
+
+            <h2 className="mt-8 mb-4 text-2xl leading-8 font-bold">
+              Qual tipo de cadastro deseja fazer:
+            </h2>
             {/* Radio Input:*/}
             <div className="flex gap-10 mb-14">
-
               <div>
-                <input id="point" className="text-sm font-semibold mr-3 cursor-pointer"
-                  onClick={() => setTipoCadastro("pontoColeta")} type="radio" name="status" checked />
-                <label htmlFor="point" >Ponto de Coleta</label>
+                <input
+                  id="point"
+                  className="text-sm font-semibold mr-3 cursor-pointer"
+                  onClick={() => setTipoCadastro("pontoColeta")}
+                  type="radio"
+                  name="status"
+                />
+                <label htmlFor="point">Ponto de Coleta</label>
               </div>
 
               <div>
-                <input id="brand" className="text-sm font-semibold mr-3 cursor-pointer"
-                  onClick={() => setTipoCadastro("marcaParceira")} type="radio" name="status" />
-                <label htmlFor="brand" >Marca Parceira</label>
+                <input
+                  id="brand"
+                  className="text-sm font-semibold mr-3 cursor-pointer"
+                  onClick={() => setTipoCadastro("marcaParceira")}
+                  type="radio"
+                  name="status"
+                />
+                <label htmlFor="brand">Marca Parceira</label>
               </div>
             </div>
 
             {/*carregar compoente*/}
             {renderSwitch(tipoCadastro)}
-
 
             {/* Botão */}
             <div className="mt-6 flex items-center justify-end gap-x-6">
@@ -203,9 +249,7 @@ export default function Registration() {
               >
                 Cancelar
               </button>
-              <button
-                className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark"
-              >
+              <button className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark">
                 Salvar
               </button>
             </div>
@@ -214,4 +258,4 @@ export default function Registration() {
       </form>
     </div>
   );
-};
+}
