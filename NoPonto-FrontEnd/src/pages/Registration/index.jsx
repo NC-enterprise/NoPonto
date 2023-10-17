@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import PartnerBrand from "../../components/PartnerBrand";
 import PointRegistration from "../../components/PointRegistration/index";
-// import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer} from "react-leaflet";
+import './leaflet.css';
 
 export default function Registration() {
   const [formData, setFormData] = useState({
@@ -80,11 +81,10 @@ export default function Registration() {
     });
   };
 
-  const position = [51.505, -0.09]
-
+  const position = [-23.6867, -46.6223];
   return (
-    <div className="mx-auto max-w-screen-md sm:py-44 lg:py-46 text-colorMidGreen">
-      <form onSubmit={handlePointRegistration()} className=" space-y-12">
+    <div className="mx-auto max-w-screen-md sm:py-44 lg:py-46 md:py-46 text-colorMidGreen px-6 md:px-0">
+      <form onSubmit={handlePointRegistration} className=" space-y-12">
         <div>
           <div className="border-borderColor-900/10 pb-12">
             <h1 className="text-colorDarkGreen text-4xl md:text-6xl font-bold leading-7 mt-6">
@@ -184,32 +184,35 @@ export default function Registration() {
               </div>
 
               {/* Endereço:*/}
-              <div className="col-span-full">
+              <div className="col-span-full h-72">
                 <label
                   htmlFor="endereço"
-                  className="block text-base font-medium leading-6"
+                  className="block text-base font-medium leading-6 mb-5"
                 >
                   Endereço:
-                </label>
-                {/* <MapContainer
-                  center={position}
-                  zoom={13}
-                  scrollWheelZoom={false}
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  <Marker position={position}>
+                </label>         
+                  <div className="mt-2">
+                    <MapContainer
+                      center={position}
+                      zoom={13}
+                      style={{ height: '300px', width: '100%' }}
+                    >
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                      {/* <Marker position={position}>
                     <Popup>
                       A pretty CSS3 popup. <br /> Easily customizable.
                     </Popup>
-                  </Marker>
-                </MapContainer> */}
+                  </Marker> */}
+                    </MapContainer>
+                  </div>         
               </div>
+
             </div>
 
-            <h2 className="mt-8 mb-4 text-2xl leading-8 font-bold">
+            <h2 className="mt-20 mb-4 text-2xl leading-8 font-bold">
               Qual tipo de cadastro deseja fazer:
             </h2>
             {/* Radio Input:*/}
