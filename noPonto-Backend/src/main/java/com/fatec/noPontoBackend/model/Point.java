@@ -20,22 +20,14 @@ public class Point {
     private String contatoTelefone;
     private String contatoEmail;
     private String site;
-    private boolean acessibilidade;
-    private String[] recursosNoLocal;
-    private String[] parcerias;
     private String[] fotos;
-    private String statusOperacao;
-    private String licencaAutorizacao;
-    private String[] historicoManutencao;
 
     public Point() {
     }
 
     public Point(String nome, String endereco, double latitude, double longitude,
                          String horarioFuncionamento, String[] materiaisAceitos, String instrucoesTriagem, String responsavel,
-                         String contatoTelefone, String contatoEmail, String site, boolean acessibilidade, String[] recursosNoLocal,
-                         String[] parcerias, String[] fotos, String statusOperacao, String licencaAutorizacao,
-                         String[] historicoManutencao) {
+                         String contatoTelefone, String contatoEmail, String site, String[] fotos) {
         this.nome = nome;
         this.endereco = endereco;
         this.latitude = latitude;
@@ -47,13 +39,7 @@ public class Point {
         this.contatoTelefone = contatoTelefone;
         this.contatoEmail = contatoEmail;
         this.site = site;
-        this.acessibilidade = acessibilidade;
-        this.recursosNoLocal = recursosNoLocal;
-        this.parcerias = parcerias;
         this.fotos = fotos;
-        this.statusOperacao = statusOperacao;
-        this.licencaAutorizacao = licencaAutorizacao;
-        this.historicoManutencao = historicoManutencao;
     }
 
     public Long getId() {
@@ -152,60 +138,12 @@ public class Point {
         this.site = site;
     }
 
-    public boolean isAcessibilidade() {
-        return acessibilidade;
-    }
-
-    public void setAcessibilidade(boolean acessibilidade) {
-        this.acessibilidade = acessibilidade;
-    }
-
-    public String[] getRecursosNoLocal() {
-        return recursosNoLocal;
-    }
-
-    public void setRecursosNoLocal(String[] recursosNoLocal) {
-        this.recursosNoLocal = recursosNoLocal;
-    }
-
-    public String[] getParcerias() {
-        return parcerias;
-    }
-
-    public void setParcerias(String[] parcerias) {
-        this.parcerias = parcerias;
-    }
-
     public String[] getFotos() {
         return fotos;
     }
 
     public void setFotos(String[] fotos) {
         this.fotos = fotos;
-    }
-
-    public String getStatusOperacao() {
-        return statusOperacao;
-    }
-
-    public void setStatusOperacao(String statusOperacao) {
-        this.statusOperacao = statusOperacao;
-    }
-
-    public String getLicencaAutorizacao() {
-        return licencaAutorizacao;
-    }
-
-    public void setLicencaAutorizacao(String licencaAutorizacao) {
-        this.licencaAutorizacao = licencaAutorizacao;
-    }
-
-    public String[] getHistoricoManutencao() {
-        return historicoManutencao;
-    }
-
-    public void setHistoricoManutencao(String[] historicoManutencao) {
-        this.historicoManutencao = historicoManutencao;
     }
 }
 
