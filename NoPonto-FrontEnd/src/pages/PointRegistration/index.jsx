@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { MapContainer, TileLayer } from "react-leaflet";
+import './leaflet.css'
 
 export default function PartnerBrand() {
     const [formData, setFormData] = useState({
@@ -81,7 +82,7 @@ export default function PartnerBrand() {
             <form onSubmit={handlePointRegistration} className=" space-y-12">
                 <div>
                     <div className="border-borderColor-900/10 pb-12">
-                        <h1 className="text-colorDarkGreen text-4xl md:text-6xl font-bold leading-7 mt-6">
+                        <h1 className="text-colorDarkGreen text-3xl md:text-5xl font-bold leading-7 mt-6">
                             Cadastro de Ponto de Coleta
                         </h1>
 

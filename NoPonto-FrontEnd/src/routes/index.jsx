@@ -8,7 +8,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import point from './point';
 import pagePoint from './pagePoint';
-import Registration from './registration';
 import partnerBrand from './PartnerBrand';
 import pointRegistration from './pointRegistration';
 
@@ -26,7 +25,6 @@ import pointRegistration from './pointRegistration';
       ...home,
       ...point,
       ...pagePoint,
-      ...Registration,
       ...partnerBrand,
       ...pointRegistration
     ],
