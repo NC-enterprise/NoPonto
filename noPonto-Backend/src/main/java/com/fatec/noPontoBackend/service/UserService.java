@@ -41,10 +41,10 @@ public class UserService implements IUserService {
         logger.info(">>>>>> serviço atualizar iniciado para o ID: " + id);
 
         if (repositoryU.existsById(id)) {
-            usuario.setId(id); // Certifique-se de definir o ID do usuário com o ID fornecido
+            usuario.setId(id);
             return Optional.ofNullable(repositoryU.save(usuario));
         } else {
-            return Optional.empty(); // Usuário com o ID especificado não encontrado
+            return Optional.empty();
         }
     }
 

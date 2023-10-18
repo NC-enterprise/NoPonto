@@ -16,9 +16,9 @@ public class LoadUserDatabase {
     @Bean
     CommandLineRunner initUserDatabase(IUserRepository userRepository){
         return  args -> {
-            Users user1 = new Users("João", "Silva", "joao@email.com");
-            Users user2 = new Users("Maria", "Santos", "maria@email.com");
-            Users user3 = new Users("Pedro", "Ferreira", "pedro@email.com");
+            Users user1 = new Users("João", "Silva", "joao@email.com", "12345678");
+            Users user2 = new Users("Maria", "Santos", "maria@email.com", "12345678");
+            Users user3 = new Users("Pedro", "Ferreira", "pedro@email.com", "12345678");
 
             userRepository.saveAll(Arrays.asList(user1, user2, user3));
             logger.info(">>>>> LoadUserDatabase -> Cadastro de 3 usuários realizado.");

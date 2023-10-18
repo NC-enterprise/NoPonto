@@ -13,14 +13,17 @@ public class Users {
     private String sobreNome;
     private String contatoEmail;
 
+    private String senha;
+
     public Users(){
 
     }
 
-    public Users(String nome, String sobreNome, String contatoEmail) {
+    public Users(String nome, String sobreNome, String contatoEmail, String senha) {
         this.nome = nome;
         this.sobreNome = sobreNome;
         this.contatoEmail = contatoEmail;
+        this.senha = senha;
     }
 
     public Long getId() {
@@ -53,5 +56,13 @@ public class Users {
 
     public void setContatoEmail(String contatoEmail) {
         this.contatoEmail = contatoEmail;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }
