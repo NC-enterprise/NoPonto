@@ -1,6 +1,7 @@
-import {React, useState} from 'react';
+import { React, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../services/firebaseConfig';
 
 function Login() {
@@ -14,15 +15,27 @@ function Login() {
     error,
   ] = useSignInWithEmailAndPassword(auth);
 
-  function handleSignIn(e){
+  function handleSignIn(e) {
     e.preventDefault();
     signInWithEmailAndPassword(email, password);
   }
 
-  if(loading){
+  // função de Esqueci a senha 
+  async function handleForgotPassword(e) {
+    e.preventDefault();
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert('Um e-mail de redefinição de senha foi enviado para o seu endereço de e-mail.');
+    } catch (error) {
+      console.error('Erro ao enviar e-mail de redefinição de senha:', error);
+      alert('Ocorreu um erro ao enviar o e-mail de redefinição de senha. Tente novamente.');
+    }
+  }
+  if (loading) {
     return <p>carregando...</p>
   }
-  if(user){
+  if (user) {
     return console.log(user);
   }
   return (
@@ -67,9 +80,7 @@ function Login() {
                     Senha
                   </label>
                   <div className="text-sm">
-                    <a href="#" className="font-semibold text-colorAccent2 hover:text-colorDarkGreen">
-                      Esqueceu sua senha?
-                    </a>
+                    <button onClick={handleForgotPassword} className="font-semibold text-colorAccent2 hover:text-colorDarkGreen">Esqueceu sua senha?</button>
                   </div>
                 </div>
                 <div className="mt-2">

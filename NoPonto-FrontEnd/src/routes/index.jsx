@@ -1,5 +1,4 @@
 import {
-  // BrowserRouter,
     createBrowserRouter, Outlet, RouterProvider,
   } from 'react-router-dom';
 import login from './login';
@@ -48,12 +47,6 @@ import pointRegistration from './pointRegistration';
   
     return (
       <RouterProvider router={router} />
-      
-      // <BrowserRouter>
-      // <Routes>
-      //   <Route path="/" element={<Login} />
-      // </Routes>
-      // </BrowserRouter>
     );
   }
   
