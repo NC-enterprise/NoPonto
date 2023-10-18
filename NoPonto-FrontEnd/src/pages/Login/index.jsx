@@ -1,7 +1,30 @@
-import React from 'react';
+import {React, useState} from 'react';
 import { Link } from 'react-router-dom';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { auth } from '../../services/firebaseConfig';
 
 function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [
+    signInWithEmailAndPassword,
+    user,
+    loading,
+    error,
+  ] = useSignInWithEmailAndPassword(auth);
+
+  function handleSignIn(e){
+    e.preventDefault();
+    signInWithEmailAndPassword(email, password);
+  }
+
+  if(loading){
+    return <p>carregando...</p>
+  }
+  if(user){
+    return console.log(user);
+  }
   return (
     <div className="min-h-screen py-40 bg-colorLightGrey2">
       <div className="container mx-auto">
@@ -29,6 +52,7 @@ function Login() {
                     id="email"
                     name="email"
                     className="p-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
@@ -54,12 +78,13 @@ function Login() {
                     id="password"
                     name="password"
                     className="p-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
               </div>
 
               <div className="mt-5">
-                <button className="w-full rounded-md bg-colorMidGreen px-14 py-2 text-base font-semibold text-white shadow-sm hover:bg-colorDarkGreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorDarkGreen">Entrar</button>
+                <button onClick={handleSignIn} className="w-full rounded-md bg-colorMidGreen px-14 py-2 text-base font-semibold text-white shadow-sm hover:bg-colorDarkGreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorDarkGreen">Entrar</button>
               </div>
             </form>
           </div>
