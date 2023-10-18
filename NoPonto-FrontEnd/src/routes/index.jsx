@@ -7,7 +7,11 @@ import home from './home';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import point from './point';
+import pagePoint from './pagePoint';
 import Registration from './registration';
+import partnerBrand from './PartnerBrand';
+import pointRegistration from './pointRegistration';
+
   
   const routes = [{
     path: '',
@@ -21,7 +25,10 @@ import Registration from './registration';
     children: [
       ...home,
       ...point,
-      ...Registration
+      ...pagePoint,
+      ...Registration,
+      ...partnerBrand,
+      ...pointRegistration
     ],
   }];
   

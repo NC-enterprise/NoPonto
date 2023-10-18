@@ -23,7 +23,7 @@ function Hero() {
                                 Buscar Pontos
                             </button>
                         </Link>
-                        <Link to="/registration">
+                        <Link to="/pointRegistration">
                             <button className='mr-4 hover:shadow-xl bg-colorAccent text-white hover:bg-colorDarkGreen w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>
                                 Cadastrar Ponto
                             </button>
