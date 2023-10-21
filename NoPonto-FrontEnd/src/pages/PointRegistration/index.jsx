@@ -1,58 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import './leaflet.css'
 
 export default function PartnerBrand() {
-    const [formData, setFormData] = useState({
-        nome: "Ponto de Coleta 5",
-        endereco: "Rua da Reciclagem, 123",
-        latitude: -23.456789,
-        longitude: -45.678901,
-        horarioFuncionamento: "Segunda a Sexta 08:00 - 18:00, Sábado 09:00 - 13:00",
-        materiaisAceitos: ["Papel", "Vidro", "Plástico"],
-        instrucoesTriagem: "Instruções de triagem para ponto 1",
-        responsavel: "Responsável 1",
-        contatoTelefone: "+55 (11) 1234-5678",
-        contatoEmail: "contato@ponto1.com",
-        site: "www.ponto1.com",
-        acessibilidade: true,
-        recursosNoLocal: ["Máquina de Compactação", "Recipientes Especiais"],
-        parcerias: ["Parceria 1", "Parceria 2"],
-        fotos: ["url_imagem_1.jpg", "url_imagem_2.jpg"],
-        statusOperacao: "Aberto",
-        licencaAutorizacao: "Licença XYZ-12345",
-        historicoManutencao: ["Manutenção 1", "Manutenção 2"],
+    const [items, setItems] = useState([]);
+    const [ufs, setUfs] = useState([]);
+    const [cities, setCities] = useState([]);
 
-        redesSociais: {
-            facebook: "",
-            instagram: "",
-            twitter: "",
-            linkedin: "",
-        },
+    const [selectedUf, setSelectedUf] = useState('0');
+    const [selectedItems, setSelectedItems] = useState([]);
+    const [selectedCity, setSelectedCity] = useState('0');
+    const [selectedPosition, setSelectedPosition] = useState([-23.6867, -46.6223]);
+    const [initialPosition, setInitialPosition] = useState([-23.6867, -46.6223]);
+    const [selectedFile, setSelectedFile] = useState();
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        whatsapp: '',
+        endereco: '',
+        horarioFuncionamento: '',
+        instrucoesTriagem: '',
     });
+
     const [mensage, setMensagem] = useState(String);
 
-    const [tipoCadastro, setTipoCadastro] = useState(String);
-    const [dataFromChild, setDataFromChild] = useState(null);
+    // Função para buscar as UFs do IBGE
+    useEffect(() => {
 
-    console.log(dataFromChild);
+        const fetchUfsFromIBGE = async () => {
+            try {
+                const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar as UFs do IBGE');
+                }
+                const data = await response.json();
+                // Extrair apenas a sigla das UFs
+                const ufsList = data.map(uf => uf.sigla);
+                setUfs(ufsList);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
+        // Chamar a função para buscar as UFs ao montar o componente
+        fetchUfsFromIBGE();
+    }, []);
 
-    const handleDataFromChild = (data) => {
-        setDataFromChild(data);
-    };
+    // Função para buscar as cidades da UF selecionada
+    useEffect(() => {
 
+        const fetchCitiesFromIBGE = async () => {
+            if (selectedUf) {
+                try {
+                    const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`);
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar as cidades da UF selecionada');
+                    }
+                    const data = await response.json();
+                    const citiesList = data.map(city => city.nome);
+                    setCities(citiesList);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        };
 
+        // Chamar a função para buscar as cidades quando a UF selecionada mudar
+        fetchCitiesFromIBGE();
+    }, [selectedUf]);
+
+    // Função para enviar para api
     const handlePointRegistration = async () => {
-        const ponto = formData;
+
         try {
+            const formDataToSend = new FormData();
+
+            formDataToSend.append("name", formData.nome);
+            formDataToSend.append("email", formData.email);
+            formDataToSend.append("whatsapp", formData.whatsapp);
+            formDataToSend.append("uf", selectedUf);
+            formDataToSend.append("city", selectedCity);
+            formDataToSend.append("latitude", selectedPosition[0].toString());
+            formDataToSend.append("longitude", selectedPosition[1].toString());
+            formDataToSend.append("endereco", formData.endereco);
+            formDataToSend.append("horarioFuncionamento", formData.horarioFuncionamento);
+            formDataToSend.append("instrucoesTriagem", formData.instrucoesTriagem);
+
+            const itemsString = selectedItems.join(",");
+            formDataToSend.append("items", itemsString);
+
+            if (selectedFile) {
+                formDataToSend.append("image", selectedFile);
+            }
+
             const resposta = await fetch("http://localhost:8080/api/v1/pontos/new", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(ponto),
+                body: formDataToSend,
             });
             console.log(resposta.status);
             if (!resposta.ok) {
@@ -76,7 +123,6 @@ export default function PartnerBrand() {
         });
     };
 
-    const position = [-23.6867, -46.6223];
     return (
         <div className="mx-auto max-w-screen-md sm:py-44 lg:py-46 md:py-46 text-colorMidGreen px-6 md:px-0">
             <form onSubmit={handlePointRegistration} className=" space-y-12">
@@ -90,7 +136,7 @@ export default function PartnerBrand() {
                             {/* Nome */}
                             <div className="col-span-full">
                                 <label
-                                    htmlFor="nome"
+                                    htmlFor="name"
                                     className="block text-base font-medium leading-6"
                                 >
                                     Nome:
@@ -98,9 +144,9 @@ export default function PartnerBrand() {
                                 <div className="mt-2">
                                     <input
                                         type="text"
-                                        id="nome"
-                                        name="nome"
-                                        value={formData.nome}
+                                        id="name"
+                                        name="name"
+                                        value={formData.name}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-sm sm:leading-6 pl-2"
                                     />
@@ -127,32 +173,33 @@ export default function PartnerBrand() {
                                 </div>
                             </div>
 
-                            {/* Website: */}
+                            {/* celular */}
                             <div className="col-span-full">
                                 <label
-                                    htmlFor="website"
+                                    htmlFor="whatsapp"
                                     className="block text-base font-medium leading-6"
                                 >
-                                    Website:
+                                    Celular | telefone
                                 </label>
                                 <div className="mt-2">
                                     <input
                                         type="text"
-                                        id="website"
-                                        name="website"
-                                        value={formData.website}
+                                        id="whatsapp"
+                                        name="whatsapp"
+                                        value={formData.whatsapp}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
                                     />
                                 </div>
                             </div>
+
                             {/* Imagem:*/}
                             <div className="col-span-full">
                                 <label
-                                    htmlFor="imagens"
+                                    htmlFor="image"
                                     className="block text-base font-medium leading-6"
                                 >
-                                    Imagens:
+                                    Imagem:
                                 </label>
                                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                                     <div className="text-center">
@@ -188,7 +235,7 @@ export default function PartnerBrand() {
                                 </label>
                                 <div className="mt-2">
                                     <MapContainer
-                                        center={position}
+                                        center={initialPosition}
                                         zoom={13}
                                         style={{ height: '300px', width: '100%' }}
                                     >
@@ -196,20 +243,51 @@ export default function PartnerBrand() {
                                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                         />
-                                        {/* <Marker position={position}>
-                    <Popup>
-                      A pretty CSS3 popup. <br /> Easily customizable.
-                    </Popup>
-                  </Marker> */}
+                                        <Marker position={initialPosition}
+                                            draggable={true}
+                                            onDragEnd={(e) => {
+                                                const latlng = e.target.getLatLng();
+                                                setSelectedPosition([latlng.lat, latlng.lng]);
+                                            }}
+                                        />
                                     </MapContainer>
                                 </div>
                             </div>
                         </div>
                         <div className="mt-20 border-t border-gray-900/10 pb-12">
-                            <h2 className="mt-3 text-xl font-semibold leading-7">
-                                Informações do Ponto de Coleta - Local
-                            </h2>
-
+                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                {/* Endereço */}
+                                <div className="col-span-full">
+                                    <label
+                                        htmlFor="endereco"
+                                        className="block text-base font-medium leading-6"
+                                    >
+                                        Estado:
+                                    </label>
+                                    <div className="mt-2">
+                                        <select
+                                            value={selectedUf}
+                                            onChange={(e) => setSelectedUf(e.target.value)}
+                                        >
+                                            <option value="">Selecione uma UF</option>
+                                            {ufs.map(uf => (
+                                                <option key={uf} value={uf}>{uf}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="mt-2">
+                                        <select
+                                            value={selectedCity}
+                                            onChange={(e) => setSelectedCity(e.target.value)}
+                                        >
+                                            <option value="">Selecione uma cidade</option>
+                                            {cities.map(city => (
+                                                <option key={city} value={city}>{city}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                 {/* Endereço */}
                                 <div className="col-span-full">
@@ -230,44 +308,6 @@ export default function PartnerBrand() {
                                         />
                                     </div>
                                 </div>
-                                {/* Latitude: */}
-                                <div className="sm:col-span-3 sm:col-start-1">
-                                    <label
-                                        htmlFor="latitude"
-                                        className="block text-base font-medium leading-6"
-                                    >
-                                        Latitude:
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            id="latitude"
-                                            name="latitude"
-                                            value={formData.latitude}
-                                            onChange={handleInputChange}
-                                            className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                        />
-                                    </div>
-                                </div>
-                                {/* Longitude:: */}
-                                <div className="sm:col-span-3">
-                                    <label
-                                        htmlFor="longitude"
-                                        className="block text-base font-medium leading-6"
-                                    >
-                                        Longitude:
-                                    </label>
-                                    <div className="mt-2">
-                                        <input
-                                            type="text"
-                                            id="longitude"
-                                            name="longitude"
-                                            value={formData.longitude}
-                                            onChange={handleInputChange}
-                                            className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                        />
-                                    </div>
-                                </div>
                             </div>
 
                             <div className="border-b border-gray-900/10 pb-12">
@@ -278,22 +318,7 @@ export default function PartnerBrand() {
                                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                                     {/* Materiais Aceitos: */}
                                     <div className="col-span-full">
-                                        <label
-                                            htmlFor="materiaisAceitos"
-                                            className="block text-base font-medium leading-6"
-                                        >
-                                            Materiais Aceitos:
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                id="materiaisAceitos"
-                                                name="materiaisAceitos"
-                                                value={formData.materiaisAceitos.join(", ")}
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                            />
-                                        </div>
+
                                     </div>
                                     {/* Instruções de Triagem: */}
                                     <div className="col-span-full">
@@ -314,44 +339,7 @@ export default function PartnerBrand() {
                                             />
                                         </div>
                                     </div>
-                                    {/* Responsável: */}
-                                    <div className="sm:col-span-3 sm:col-start-1">
-                                        <label
-                                            htmlFor="responsavel"
-                                            className="block text-base font-medium leading-6"
-                                        >
-                                            Responsável:
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                id="responsavel"
-                                                name="responsavel"
-                                                value={formData.responsavel}
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                            />
-                                        </div>
-                                    </div>
-                                    {/* Telefone: */}
-                                    <div className="sm:col-span-3">
-                                        <label
-                                            htmlFor="telefone"
-                                            className="block text-base font-medium leading-6"
-                                        >
-                                            Telefone:
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                id="telefone"
-                                                name="telefone"
-                                                value={formData.telefone}
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                            />
-                                        </div>
-                                    </div>
+
                                     {/* Horário de Funcionamento: */}
                                     <div className="sm:col-span-3 sm:col-start-1">
                                         <label
@@ -371,111 +359,6 @@ export default function PartnerBrand() {
                                             />
                                         </div>
                                     </div>
-                                    {/* Status: */}
-                                    <div className="sm:col-span-3">
-                                        <label
-                                            htmlFor="status"
-                                            className="block text-base font-medium leading-6"
-                                        >
-                                            Status:
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                id="status"
-                                                name="status"
-                                                value={formData.status}
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    {/* Licença: */}
-                                    <div className="col-span-full">
-                                        <label
-                                            htmlFor="licenca"
-                                            className="block text-base font-medium leading-6"
-                                        >
-                                            Licença:
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                id="licenca"
-                                                name="licenca"
-                                                value={formData.licenca}
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                            />
-                                        </div>
-                                    </div>
-                                    {/* Manutenções: */}
-                                    <div className="col-span-full">
-                                        <label
-                                            htmlFor="manutencoes"
-                                            className="block text-base font-medium leading-6"
-                                        >
-                                            Manutenções:
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                id="manutencoes"
-                                                name="manutencoes"
-                                                value={formData.historicoManutencao.join(", ")} // Transforme o array em uma string para exibição
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                            />
-                                        </div>
-                                    </div>
-                                    {/* Equipamentos: */}
-                                    {/* Parcerias: */}
-                                    <div className="col-span-full">
-                                        <label
-                                            htmlFor="parcerias"
-                                            className="block text-base font-medium leading-6"
-                                        >
-                                            Parcerias:
-                                        </label>
-                                        <div className="mt-2">
-                                            <input
-                                                type="text"
-                                                id="parcerias"
-                                                name="parcerias"
-                                                value={formData.parcerias.join(", ")} // Transforme o array em uma string para exibição
-                                                onChange={handleInputChange}
-                                                className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="mt-5 space-y-10">
-                                        {/* Ativo */}
-                                        <fieldset>
-                                            <legend className="text-base font-semibold leading-6">
-                                                O ponto:
-                                            </legend>
-                                            <div className="mt-6 space-y-6">
-                                                <div className="relative flex gap-x-3">
-                                                    <div className="flex h-6 items-center">
-                                                        <input
-                                                            type="checkbox"
-                                                            id="ativo"
-                                                            name="ativo"
-                                                            checked={formData.ativo}
-                                                            onChange={handleInputChange}
-                                                            className="h-4 w-4 rounded border-gray-300 text-colorMidGreen focus:ring-colorMidGreen"
-                                                        />
-                                                    </div>
-                                                    <div className="text-base leading-6">
-                                                        <label htmlFor="ativo" className="font-medium">
-                                                            Ativo
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -485,11 +368,10 @@ export default function PartnerBrand() {
                             <button
                                 type="button"
                                 className="text-sm font-semibold leading-6"
-                                onClick={() => console.log(formData)}
                             >
                                 Cancelar
                             </button>
-                            <button className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark">
+                            <button className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark" type="submit">
                                 Salvar
                             </button>
                         </div>

@@ -1,59 +1,54 @@
 package com.fatec.noPontoBackend.model;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fatec.noPontoBackend.service.FileStorageService;
+import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Entity
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String nome;
-    private String endereco;
-    private double latitude;
+    private String image;
+    private String name;
+    private String email;
+    private String whatsapp;
+    private String uf;
+    private String city;
     private double longitude;
+    private double latitude;
+    private String endereco;
     private String horarioFuncionamento;
-    private String[] materiaisAceitos;
     private String instrucoesTriagem;
-    private String responsavel;
-    private String contatoTelefone;
-    private String contatoEmail;
-    private String site;
-    private boolean acessibilidade;
-    private String[] recursosNoLocal;
-    private String[] parcerias;
-    private String[] fotos;
-    private String statusOperacao;
-    private String licencaAutorizacao;
-    private String[] historicoManutencao;
+
+    @ManyToMany
+    private List<Item> items;
+
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     public Point() {
     }
 
-    public Point(String nome, String endereco, double latitude, double longitude,
-                         String horarioFuncionamento, String[] materiaisAceitos, String instrucoesTriagem, String responsavel,
-                         String contatoTelefone, String contatoEmail, String site, boolean acessibilidade, String[] recursosNoLocal,
-                         String[] parcerias, String[] fotos, String statusOperacao, String licencaAutorizacao,
-                         String[] historicoManutencao) {
-        this.nome = nome;
-        this.endereco = endereco;
-        this.latitude = latitude;
+    public Point(String image, String name, String email, String whatsapp, String uf, String city, double longitude, double latitude, String endereco, String horarioFuncionamento, String instrucoesTriagem, List<Item> items) {
+        this.image = image;
+        this.name = name;
+        this.email = email;
+        this.whatsapp = whatsapp;
+        this.uf = uf;
+        this.city = city;
         this.longitude = longitude;
+        this.latitude = latitude;
+        this.endereco = endereco;
         this.horarioFuncionamento = horarioFuncionamento;
-        this.materiaisAceitos = materiaisAceitos;
         this.instrucoesTriagem = instrucoesTriagem;
-        this.responsavel = responsavel;
-        this.contatoTelefone = contatoTelefone;
-        this.contatoEmail = contatoEmail;
-        this.site = site;
-        this.acessibilidade = acessibilidade;
-        this.recursosNoLocal = recursosNoLocal;
-        this.parcerias = parcerias;
-        this.fotos = fotos;
-        this.statusOperacao = statusOperacao;
-        this.licencaAutorizacao = licencaAutorizacao;
-        this.historicoManutencao = historicoManutencao;
+        this.items = items;
+    }
+
+    public <T> Point(String image, String s, String mail, String number, String s1, double v, double v1, String s2, String s3, List<T> list) {
     }
 
     public Long getId() {
@@ -64,28 +59,52 @@ public class Point {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getImage() {
+        return image;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setImage(String image) {
+        this.image = image;
     }
 
-    public String getEndereco() {
-        return endereco;
+    public String getName() {
+        return name;
     }
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getWhatsapp() {
+        return whatsapp;
+    }
+
+    public void setWhatsapp(String whatsapp) {
+        this.whatsapp = whatsapp;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public double getLongitude() {
@@ -96,20 +115,28 @@ public class Point {
         this.longitude = longitude;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
     public String getHorarioFuncionamento() {
         return horarioFuncionamento;
     }
 
     public void setHorarioFuncionamento(String horarioFuncionamento) {
         this.horarioFuncionamento = horarioFuncionamento;
-    }
-
-    public String[] getMateriaisAceitos() {
-        return materiaisAceitos;
-    }
-
-    public void setMateriaisAceitos(String[] materiaisAceitos) {
-        this.materiaisAceitos = materiaisAceitos;
     }
 
     public String getInstrucoesTriagem() {
@@ -120,93 +147,27 @@ public class Point {
         this.instrucoesTriagem = instrucoesTriagem;
     }
 
-    public String getResponsavel() {
-        return responsavel;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setResponsavel(String responsavel) {
-        this.responsavel = responsavel;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
-    public String getContatoTelefone() {
-        return contatoTelefone;
+    public void saveImage(MultipartFile imageFile) {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            this.image = fileStorageService.storeFile(imageFile);
+        }
     }
 
-    public void setContatoTelefone(String contatoTelefone) {
-        this.contatoTelefone = contatoTelefone;
-    }
-
-    public String getContatoEmail() {
-        return contatoEmail;
-    }
-
-    public void setContatoEmail(String contatoEmail) {
-        this.contatoEmail = contatoEmail;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public boolean isAcessibilidade() {
-        return acessibilidade;
-    }
-
-    public void setAcessibilidade(boolean acessibilidade) {
-        this.acessibilidade = acessibilidade;
-    }
-
-    public String[] getRecursosNoLocal() {
-        return recursosNoLocal;
-    }
-
-    public void setRecursosNoLocal(String[] recursosNoLocal) {
-        this.recursosNoLocal = recursosNoLocal;
-    }
-
-    public String[] getParcerias() {
-        return parcerias;
-    }
-
-    public void setParcerias(String[] parcerias) {
-        this.parcerias = parcerias;
-    }
-
-    public String[] getFotos() {
-        return fotos;
-    }
-
-    public void setFotos(String[] fotos) {
-        this.fotos = fotos;
-    }
-
-    public String getStatusOperacao() {
-        return statusOperacao;
-    }
-
-    public void setStatusOperacao(String statusOperacao) {
-        this.statusOperacao = statusOperacao;
-    }
-
-    public String getLicencaAutorizacao() {
-        return licencaAutorizacao;
-    }
-
-    public void setLicencaAutorizacao(String licencaAutorizacao) {
-        this.licencaAutorizacao = licencaAutorizacao;
-    }
-
-    public String[] getHistoricoManutencao() {
-        return historicoManutencao;
-    }
-
-    public void setHistoricoManutencao(String[] historicoManutencao) {
-        this.historicoManutencao = historicoManutencao;
+    public String getImageUrl() {
+        if (this.image != null) {
+            return fileStorageService.getImageUrl(this.image);
+        }
+        return null;
     }
 }
+
 
 
