@@ -1,54 +1,64 @@
 package com.fatec.noPontoBackend.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import org.springframework.core.io.ClassPathResource;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Entity
 public class Item {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String title;
-    private String image;
+    private Long id;
+    private String nome;
+
+    @Lob
+    private byte[] imagem;
+
+//    @ManyToMany(mappedBy = "itens")
+//    private Set<Point> pontos = new HashSet<>();
 
     public Item() {
     }
 
-    public Item(String title, String image) {
-        this.title = title;
-        this.image = image;
+    public Item(String nome, String caminhoDaImagem) {
+        this.nome = nome;
+        this.imagem = carregarImagem(caminhoDaImagem);
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getNome() {
+        return nome;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getImage() {
-        return image;
+    public byte[] getImagem() {
+        return imagem;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImagem(byte[] imagem) {
+        this.imagem = imagem;
     }
 
-    public List<Item> consultarItens() {
-        return null;
+    private byte[] carregarImagem(String caminhoDaImagem) {
+        try {
+            ClassPathResource resource = new ClassPathResource(caminhoDaImagem);
+            Path imagePath = resource.getFile().toPath();
+            return Files.readAllBytes(imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao carregar imagem: " + e.getMessage());
+        }
     }
 }

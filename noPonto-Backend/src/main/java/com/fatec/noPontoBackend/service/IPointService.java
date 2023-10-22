@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface IPointService {
     List<Point> consultaPontosDeColeta();
     Optional<Point> consultaPorId(Long id);
-    Optional<Point> consultaPorNome(String nome);
+    Optional<Point> consultaPorNome(String name);
     Optional<Point> cadastrar(Point pontoDeColeta);
     Optional<Point> atualizar(Long id, Point pontoDeColeta);
     void excluir(Long id);

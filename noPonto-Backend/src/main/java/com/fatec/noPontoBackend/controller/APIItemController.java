@@ -1,6 +1,6 @@
 package com.fatec.noPontoBackend.controller;
 
-import com.fatec.noPontoBackend.model.Item;
+import com.fatec.noPontoBackend.service.IItemService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,21 +11,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("api/v1/items")
+@RequestMapping("api/v1/itens")
 public class APIItemController {
     Logger logger = LogManager.getLogger(this.getClass());
 
     @Autowired
-    private Item itemService;
+    IItemService itemService;
 
     @CrossOrigin
     @GetMapping
-    public ResponseEntity<Object> consultaTodos() {
-        logger.info(">>>>>> API ItemController consulta todos");
-        List<Item> items = itemService.consultarItens();
-        return ResponseEntity.status(HttpStatus.OK).body(items);
+    public ResponseEntity<Object> consultaTodos(){
+        logger.info(">>>>>> apicontroller consulta todos");
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.consultaItens());
     }
 }

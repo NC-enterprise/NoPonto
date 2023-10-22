@@ -1,28 +1,31 @@
 package com.fatec.noPontoBackend.service;
 
+import com.fatec.noPontoBackend.model.IItemRepository;
+import com.fatec.noPontoBackend.model.IUserRepository;
+import com.fatec.noPontoBackend.model.Item;
+import com.fatec.noPontoBackend.model.Users;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.fatec.noPontoBackend.model.Item;
-import com.fatec.noPontoBackend.model.IItem;
 
 import java.util.Arrays;
 
 @Configuration
 public class LoadItemDatabase {
+
     Logger logger = LogManager.getLogger(this.getClass());
 
     @Bean
-    CommandLineRunner initItemDatabase(IItem repository) {
+    CommandLineRunner initItemDatabase(IItemRepository itemRepository) {
         return args -> {
-            Item item1 = new Item("Papel", "url_imagem_1.jpg");
-            Item item2 = new Item("Vidro", "url_imagem_2.jpg");
-            Item item3 = new Item("Plástico", "url_imagem_3.jpg");
+            Item item1 = new Item("Baterias", "images/baterias.svg");
+            Item item2 = new Item("eletronicos", "images/eletronicos.svg");
+            Item item3 = new Item("oleo", "images/oleo.svg");
 
-            repository.saveAll(Arrays.asList(item1, item2, item3));
-            logger.info(">>>>> loaddatabase -> cadastro de 3 itens realizado.");
+            itemRepository.saveAll(Arrays.asList(item1, item2, item3));
+            logger.info(">>>>> LoadItemDatabase -> Cadastro de 3 itens realizado.");
         };
     }
 }

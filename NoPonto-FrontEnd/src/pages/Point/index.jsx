@@ -4,6 +4,11 @@ import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { Icon, divIcon, point } from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import './leaflet.css'
+import pontoImage from '../../assets/ponto.png';
 
 const sortOptions = [
   { name: 'Mais popular', href: '#', current: true },
@@ -30,31 +35,61 @@ const filters = [
       { value: 'santoAndre', label: 'Santo André', checked: false },
     ],
   },
-  {
-    id: 'campanha',
-    name: 'Campanhas Especiais',
-    options: [
-      { value: 'agasalho', label: 'Agasalho', checked: false },
-      { value: 'alimento', label: 'Alimentos não perecíveis', checked: false },
-      { value: 'brinquedo', label: 'Brinquedos', checked: true },
-      { value: 'eletronicos', label: 'Eletrônicos', checked: false },
-      { value: 'livros', label: 'Livros', checked: false },
-      { value: 'moveis', label: 'Móveis', checked: false },
 
-    ],
-  },
+  // {
+  //   id: 'campanha',
+  //   name: 'Campanhas Especiais',
+  //   options: [
+  //     { value: 'agasalho', label: 'Agasalho', checked: false },
+  //     { value: 'alimento', label: 'Alimentos não perecíveis', checked: false },
+  //     { value: 'brinquedo', label: 'Brinquedos', checked: true },
+  //     { value: 'eletronicos', label: 'Eletrônicos', checked: false },
+  //     { value: 'livros', label: 'Livros', checked: false },
+  //     { value: 'moveis', label: 'Móveis', checked: false },
+
+  //   ],
+  // },
 
 ]
+const customIcon = new Icon({
+  iconUrl: pontoImage,
+  iconSize: [38, 38]
+});
+// custom cluster icon
+const createClusterCustomIcon = function (cluster) {
+  return new divIcon({
+    html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
+    className: "custom-marker-cluster",
+    iconSize: point(33, 33, true)
+  });
+};
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 function Point() {
+  const [initialPosition, setInitialPosition] = useState([-23.6936355, -46.641581]);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   const [pontos, setPontos] = React.useState([]);
+  const [localPonto, setLocalPonto] = React.useState([]);
   const [erro, setErro] = React.useState(null);
-  console.log(pontos)
+
+  console.log(localPonto)
+
+  React.useEffect(() => {
+    if (pontos && pontos.length > 0) {
+      const extractedPoints = pontos.map(p => ({
+        name: p.name,
+        longitude: p.longitude,
+        latitude: p.latitude,
+      }));
+
+      console.log(extractedPoints);
+
+      setLocalPonto(extractedPoints);
+    }
+  }, [pontos]);
 
   React.useEffect(() => {
     const consulta = async () => {
@@ -299,7 +334,31 @@ function Point() {
               </form>
 
               {/* Product grid */}
+
               <div className="lg:col-span-3">
+                <div className='pb-8'>
+
+                  <MapContainer
+                    center={initialPosition}
+                    zoom={13}
+                    style={{ height: '300px', width: '100%' }}
+                  >
+                    <TileLayer
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <MarkerClusterGroup
+                      chunkedLoading
+                      iconCreateFunction={createClusterCustomIcon}
+                    >
+                      {localPonto.map((local) => (
+                        <Marker key={local.name} position={[local.latitude, local.longitude]} icon={customIcon}>
+                          <Popup>{local.name}</Popup>
+                        </Marker>
+                      ))}
+                    </MarkerClusterGroup>
+                  </MapContainer>
+                </div>
                 <div className='p-15 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8'>
 
                   {pontos.map((point, index) => (

@@ -1,8 +1,5 @@
 package com.fatec.noPontoBackend.model;
-import com.fatec.noPontoBackend.service.FileStorageService;
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,17 +20,15 @@ public class Point {
     private String horarioFuncionamento;
     private String instrucoesTriagem;
 
-    @ManyToMany
-    private List<Item> items;
-
-
-    @Autowired
-    private FileStorageService fileStorageService;
+    @ElementCollection
+    @CollectionTable(name = "point_items", joinColumns = @JoinColumn(name = "point_id"))
+    @Column(name = "item_id")
+    private List<Long> items;
 
     public Point() {
     }
 
-    public Point(String image, String name, String email, String whatsapp, String uf, String city, double longitude, double latitude, String endereco, String horarioFuncionamento, String instrucoesTriagem, List<Item> items) {
+    public Point(String image, String name, String email, String whatsapp, String uf, String city, double longitude, double latitude, String endereco, String horarioFuncionamento, String instrucoesTriagem, List<Long> items) {
         this.image = image;
         this.name = name;
         this.email = email;
@@ -48,8 +43,6 @@ public class Point {
         this.items = items;
     }
 
-    public <T> Point(String image, String s, String mail, String number, String s1, double v, double v1, String s2, String s3, List<T> list) {
-    }
 
     public Long getId() {
         return id;
@@ -147,26 +140,14 @@ public class Point {
         this.instrucoesTriagem = instrucoesTriagem;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<Long> getItems() {
+        return this.items;
     }
 
-    public void setItems(List<Item> items) {
+    public void setItems(List<Long> items) {
         this.items = items;
     }
 
-    public void saveImage(MultipartFile imageFile) {
-        if (imageFile != null && !imageFile.isEmpty()) {
-            this.image = fileStorageService.storeFile(imageFile);
-        }
-    }
-
-    public String getImageUrl() {
-        if (this.image != null) {
-            return fileStorageService.getImageUrl(this.image);
-        }
-        return null;
-    }
 }
 
 

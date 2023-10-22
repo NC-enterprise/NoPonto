@@ -28,7 +28,7 @@ public class PointService implements IPointService {
     }
 
     @Override
-    public Optional<Point> consultaPorNome(String nome) {
+    public Optional<Point> consultaPorNome(String name) {
         return Optional.empty();
     }
 
