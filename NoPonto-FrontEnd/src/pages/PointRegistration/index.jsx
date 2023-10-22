@@ -12,9 +12,9 @@ export default function PartnerBrand() {
     const [selectedUf, setSelectedUf] = useState('0');
     const [selectedItems, setSelectedItems] = useState([]);
     const [selectedCity, setSelectedCity] = useState('0');
-    const [selectedPosition, setSelectedPosition] = useState([-23.6867, -46.6223]);
-    const [initialPosition, setInitialPosition] = useState([-23.6936355, -46.641581]);
-    const [selectedFile, setSelectedFile] = useState();
+    const [initialPosition, setInitialPosition] = useState([0,0]);
+    const [selectedPosition, setSelectedPosition] = useState(initialPosition);
+    const [selectedFile, setSelectedFile] = useState('');
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -26,6 +26,9 @@ export default function PartnerBrand() {
 
     const [mensage, setMensagem] = useState(String);
     const [erro, setErro] = React.useState(null);
+
+    console.log(selectedPosition)
+
 
     //itens 
     useEffect(() => {
@@ -52,10 +55,8 @@ export default function PartnerBrand() {
         if (alreadySelected) {
           const filteredItems = selectedItems.filter(item => item !== id);
           setSelectedItems(filteredItems);
-          console.log(selectedItems)
         } else {
           setSelectedItems([...selectedItems, id]);
-          console.log(selectedItems)
         }
       }
 
@@ -106,10 +107,16 @@ export default function PartnerBrand() {
 
     //função geo
     useEffect(() => {
-        navigator.geolocation.getCurrentPosition(position => {
-            const { latitude, longitude } = position.coords;
-            setInitialPosition([latitude, longitude]);
-        })
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const {latitude, longitude} = position.coords;
+                setInitialPosition([latitude, longitude]);
+            },
+            (error) => {
+              console.error(error);
+                setInitialPosition([0, 0]);
+            }
+        );
     }, []);
 
     // Função para enviar para api
@@ -152,6 +159,22 @@ export default function PartnerBrand() {
 
         console.log(mensage);
     };
+
+    // upload de imagem
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+       
+        reader.onload = () => {
+            const base64String = reader.result.split(',')[1];      
+            setSelectedFile(base64String);
+        };
+
+         if (file) {
+            reader.readAsDataURL(file);
+        }
+      };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -253,8 +276,10 @@ export default function PartnerBrand() {
                                             <input
                                                 id="selectedFile"
                                                 name="selectedFile"
+                                                accept="image/*"
                                                 type="file"
                                                 className="sr-only"
+                                                onChange={handleImageUpload}
                                             />
                                         </label>
                                     </div>
@@ -284,8 +309,11 @@ export default function PartnerBrand() {
                                         draggable={true}
                                         onDragEnd={(e) => {
                                             const latlng = e.target.getLatLng();
-                                            setSelectedPosition([latlng.lat, latlng.lng]);
+                                            if (latlng) {
+                                                setSelectedPosition([latlng.lat, latlng.lng]);
+                                            }
                                         }}
+                                        
                                     />
                                 </MapContainer>
                             </div>
@@ -381,7 +409,7 @@ export default function PartnerBrand() {
                                         Instruções de Triagem:
                                     </label>
                                     <div className="mt-2">
-                                        <input
+                                        <textarea
                                             type="text"
                                             id="instrucoesTriagem"
                                             name="instrucoesTriagem"
@@ -393,7 +421,7 @@ export default function PartnerBrand() {
                                 </div>
 
                                 {/* Horário de Funcionamento: */}
-                                <div className="sm:col-span-3 sm:col-start-1">
+                                <div className="col-span-full">
                                     <label
                                         htmlFor="horarioFuncionamento"
                                         className="block text-base font-medium leading-6"

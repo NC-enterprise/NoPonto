@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.fatec.noPontoBackend.model.Point;
 import com.fatec.noPontoBackend.service.IPointService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -32,5 +33,23 @@ public class APIPointController {
         logger.info(">>>>>> apicontroller cadastrar ponto iniciado");
         Optional<Point>ponto=pointService.cadastrar(p);
         return ResponseEntity.status(HttpStatus.CREATED).body(ponto.get());
+    }
+
+    @CrossOrigin
+    @GetMapping("/{pointId}")
+    public ResponseEntity<Point> getPontoById(@PathVariable Long pointId) {
+        Optional<Point> point = pointService.consultaPorId(pointId);
+        if (point.isPresent()) {
+            return new ResponseEntity<>(point.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping("/material")
+    public ResponseEntity<List<Point>> getPontosPorMaterial(@RequestParam List<Long> materialIds) {
+        List<Point> pontos = pointService.getPontosPorMaterial(materialIds);
+        return new ResponseEntity<>(pontos, HttpStatus.OK);
     }
 }

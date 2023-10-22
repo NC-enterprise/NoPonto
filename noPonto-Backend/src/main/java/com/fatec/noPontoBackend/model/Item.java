@@ -17,8 +17,6 @@ public class Item {
     @Lob
     private byte[] imagem;
 
-//    @ManyToMany(mappedBy = "itens")
-//    private Set<Point> pontos = new HashSet<>();
 
     public Item() {
     }

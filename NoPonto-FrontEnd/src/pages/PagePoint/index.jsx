@@ -1,18 +1,50 @@
 import React from 'react';
 import { ClockIcon, PhoneIcon, HomeIcon, DevicePhoneMobileIcon, LightBulbIcon, NewspaperIcon, Battery0Icon } from '@heroicons/react/24/solid'
+import { useParams } from 'react-router-dom';
+import ConverteBase64ToImage from "./ConverteBase64ToImage";
 
 function PagePoint() {
+    const { id } = useParams();
+    const [ponto, setPonto] = React.useState([]);
+    const [erro, setErro] = React.useState(null);
+    const imageUrl = ConverteBase64ToImage(ponto.image, 'image/png');
+
+    console.log(ponto)
+
+
+    React.useEffect(() => {
+        const consulta = async () => {
+          try {
+            const resposta = await fetch(`http://localhost:8080/api/v1/pontos/${id}`);
+            if (!resposta.ok) {
+              throw new Error();
+            }
+    
+            const dados = await resposta.json();
+            setPonto(dados);
+          } catch (error) {
+            setErro(error.message);
+          }
+        };
+        consulta();
+      }, [id]);
+    
+      if (erro) {
+        return <div>Erro ao acessar o endpoint da Api: {erro}</div>;
+      }
+
+
     return (
         <main className="bg-colorLightGrey2 grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
             <div className=' bg-white max-w-screen-md'>
                 <img
                     className="w-full"
-                    src="https://images.pexels.com/photos/761297/pexels-photo-761297.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    src={imageUrl}
                     alt="" />
                 <div className="px-6 py-6 mb-2">
                     {/* Nome do ponto */}
                     <div className="border-b pb-10 border-colorAccent mt-4 text-5xl md:text-5xl font-bold mb-5">
-                        <h1>Recicla</h1>
+                        <h1>{ponto.name}</h1>
                     </div>
 
                     {/* Horários */}
@@ -20,21 +52,21 @@ function PagePoint() {
                     <div className='text-base flex items-center gap-1'>
 
                         <ClockIcon className='text-colorMidGreen w-5 h-5'/>
-                        <span>Segunda a Sexta 08:00 - 18:00, Sábado 09:00 - 13:00</span>
+                        <span>{ponto.horarioFuncionamento}</span>
                     </div>
 
                     {/* Telefone */}
                     <h3 className='mt-5 text-xl font-semibold md:text-lg mb-1'>Telefone:</h3>
                     <div className='text-base flex items-center gap-1 mt-2 mb-2'>
                         <PhoneIcon className='text-colorMidGreen w-4 h-4' />
-                        <span> 11 99999999999</span>
+                        <span>{ponto.whatsapp}</span>
                     </div>
 
                     {/* Endereço */}
                     <h3 className='mt-5 text-xl font-semibold md:text-lg mb-1'>Endereço:</h3>
                     <div className='text-base flex items-center gap-1'>
                         <HomeIcon className='text-colorMidGreen w-5 h-5' />
-                        <span>Rua da Reciclagem, 123</span>
+                        <span>{ponto.endereco}</span>
                     </div>
 
                     
@@ -42,15 +74,10 @@ function PagePoint() {
                     {/* Instruções de Triagem: */}
                     <h3 className='mt-8 text-xl font-semibold md:text-lg mb-1'>Instruções de Triagem:</h3>
                     <div className='text-base w-10/12'>
-                        <p>Implementamos um processo de triagem, limitando o acesso a até duas pessoas por vez no ponto de coleta.</p>
+                        <p>{ponto.instrucoesTriagem}</p>
                     </div>
 
-                    {/* Responsável: */}
-                    <h3 className='mt-5 text-xl font-semibold md:text-lg mb-1'>Responsável:</h3>
-                    <div className='text-base'>
-                    
-                        <span>Marina Sousa</span>
-                    </div>
+
                     {/* Resíduos Coletados */}
                     <h3 className='mt-8 text-xl font-semibold md:text-lg mb-5'>Resíduos Coletados:</h3>
                     <div className='mt-5 text-base flex items-center gap-1'>

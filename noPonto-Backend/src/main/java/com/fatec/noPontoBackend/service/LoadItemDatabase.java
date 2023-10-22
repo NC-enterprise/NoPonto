@@ -21,11 +21,13 @@ public class LoadItemDatabase {
     CommandLineRunner initItemDatabase(IItemRepository itemRepository) {
         return args -> {
             Item item1 = new Item("Baterias", "images/baterias.svg");
-            Item item2 = new Item("eletronicos", "images/eletronicos.svg");
-            Item item3 = new Item("oleo", "images/oleo.svg");
+            Item item2 = new Item("Eletronicos", "images/eletronicos.svg");
+            Item item3 = new Item("Oleo", "images/oleo.svg");
+            Item item4 = new Item("Lampadas", "images/lampadas.svg");
+            Item item5 = new Item("Papeis-Papelao", "images/papeis-papelao.svg");
 
-            itemRepository.saveAll(Arrays.asList(item1, item2, item3));
-            logger.info(">>>>> LoadItemDatabase -> Cadastro de 3 itens realizado.");
+            itemRepository.saveAll(Arrays.asList(item1, item2, item3, item4, item5));
+            logger.info(">>>>> LoadItemDatabase -> Cadastro de 5 itens realizado.");
         };
     }
 }

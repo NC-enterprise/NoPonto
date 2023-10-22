@@ -24,12 +24,17 @@ public class PointService implements IPointService {
 
     @Override
     public Optional<Point> consultaPorId(Long id) {
-        return Optional.empty();
+        return repository.findById(id);
     }
 
     @Override
     public Optional<Point> consultaPorNome(String name) {
         return Optional.empty();
+    }
+
+    @Override
+    public List<Point> getPontosPorMaterial(List<Long> materialIds) {
+        return repository.findByItemsIn(materialIds);
     }
 
     @Override

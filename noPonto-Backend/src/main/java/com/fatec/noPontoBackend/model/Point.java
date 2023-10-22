@@ -1,6 +1,10 @@
 package com.fatec.noPontoBackend.model;
 import jakarta.persistence.*;
+import org.springframework.core.io.ClassPathResource;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 @Entity
@@ -8,7 +12,8 @@ public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String image;
+    @Lob
+    private byte[] image;
     private String name;
     private String email;
     private String whatsapp;
@@ -18,6 +23,8 @@ public class Point {
     private double latitude;
     private String endereco;
     private String horarioFuncionamento;
+
+    @Column(length = 1000)
     private String instrucoesTriagem;
 
     @ElementCollection
@@ -28,8 +35,7 @@ public class Point {
     public Point() {
     }
 
-    public Point(String image, String name, String email, String whatsapp, String uf, String city, double longitude, double latitude, String endereco, String horarioFuncionamento, String instrucoesTriagem, List<Long> items) {
-        this.image = image;
+    public Point( String caminhoDaImagem, String name, String email, String whatsapp, String uf, String city, double longitude, double latitude, String endereco, String horarioFuncionamento, String instrucoesTriagem, List<Long> items) {
         this.name = name;
         this.email = email;
         this.whatsapp = whatsapp;
@@ -40,6 +46,7 @@ public class Point {
         this.endereco = endereco;
         this.horarioFuncionamento = horarioFuncionamento;
         this.instrucoesTriagem = instrucoesTriagem;
+        this.image = carregarImagem(caminhoDaImagem);
         this.items = items;
     }
 
@@ -52,11 +59,10 @@ public class Point {
         this.id = id;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
     }
-
-    public void setImage(String image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 
@@ -146,6 +152,16 @@ public class Point {
 
     public void setItems(List<Long> items) {
         this.items = items;
+    }
+
+    private byte[] carregarImagem(String caminhoDaImagem) {
+        try {
+            ClassPathResource resource = new ClassPathResource(caminhoDaImagem);
+            Path imagePath = resource.getFile().toPath();
+            return Files.readAllBytes(imagePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao carregar imagem: " + e.getMessage());
+        }
     }
 
 }

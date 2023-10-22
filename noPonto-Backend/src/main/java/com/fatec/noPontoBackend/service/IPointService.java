@@ -9,6 +9,7 @@ public interface IPointService {
     List<Point> consultaPontosDeColeta();
     Optional<Point> consultaPorId(Long id);
     Optional<Point> consultaPorNome(String name);
+    List<Point> getPontosPorMaterial(List<Long> materialIds);
     Optional<Point> cadastrar(Point pontoDeColeta);
     Optional<Point> atualizar(Long id, Point pontoDeColeta);
     void excluir(Long id);

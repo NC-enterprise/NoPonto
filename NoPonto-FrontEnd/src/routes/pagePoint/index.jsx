@@ -2,7 +2,7 @@ import PagePoint from "../../pages/PagePoint";
 
 export default [
   {
-    path: '/pagePoint',
+    path: '/pagePoint/:id',
     element: <PagePoint />,
   },
 ];
