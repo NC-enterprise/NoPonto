@@ -1,4 +1,4 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,8 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fatec.noPontoBackend.model.Point;
-import com.fatec.noPontoBackend.model.IPointRepository;
+import com.fatec.nopontobackend.model.Point;
+import com.fatec.nopontobackend.model.IPointRepository;
 
 @Service
 public class PointService implements IPointService {
@@ -50,6 +50,7 @@ public class PointService implements IPointService {
 
     @Override
     public void excluir(Long id) {
+        logger.info(">>>>>> ponto excluido");
 
     }
 

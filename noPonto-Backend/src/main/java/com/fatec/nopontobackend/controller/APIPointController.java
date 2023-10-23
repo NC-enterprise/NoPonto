@@ -1,4 +1,4 @@
-package com.fatec.noPontoBackend.controller;
+package com.fatec.nopontobackend.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fatec.noPontoBackend.model.Point;
-import com.fatec.noPontoBackend.service.IPointService;
+import com.fatec.nopontobackend.model.Point;
+import com.fatec.nopontobackend.service.IPointService;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +32,11 @@ public class APIPointController {
     public ResponseEntity<Object> cadatrarPonto(@RequestBody Point p){
         logger.info(">>>>>> apicontroller cadastrar ponto iniciado");
         Optional<Point>ponto=pointService.cadastrar(p);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ponto.get());
+        if(ponto.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(ponto.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ponto não encontrado");
+        }
     }
 
     @CrossOrigin

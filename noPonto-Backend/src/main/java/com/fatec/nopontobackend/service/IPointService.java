@@ -1,6 +1,6 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
-import com.fatec.noPontoBackend.model.Point;
+import com.fatec.nopontobackend.model.Point;
 
 import java.util.List;
 import java.util.Optional;

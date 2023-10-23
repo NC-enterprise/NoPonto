@@ -1,8 +1,7 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
-import com.fatec.noPontoBackend.model.IUserRepository;
-import com.fatec.noPontoBackend.model.Users;
-import com.fatec.noPontoBackend.model.Users;
+import com.fatec.nopontobackend.model.IUserRepository;
+import com.fatec.nopontobackend.model.Users;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<Users> consultaPorId(Long id) {
-        logger.info(">>>>>> serviço consultaPorId iniciado para o ID: " + id);
+        logger.info(">>>>>> serviço consultaPorId iniciado ");
         return repositoryU.findById(id);
     }
 
@@ -38,7 +37,7 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<Users> atualizar(Long id, Users usuario) {
-        logger.info(">>>>>> serviço atualizar iniciado para o ID: " + id);
+        logger.info(">>>>>> serviço atualizar iniciado");
 
         if (repositoryU.existsById(id)) {
             usuario.setId(id); // Certifique-se de definir o ID do usuário com o ID fornecido
@@ -50,7 +49,7 @@ public class UserService implements IUserService {
 
     @Override
     public void excluir(Long id) {
-        logger.info(">>>>>> serviço excluir iniciado para o ID: " + id);
+        logger.info(">>>>>> serviço excluir iniciado");
         repositoryU.deleteById(id);
     }
 }

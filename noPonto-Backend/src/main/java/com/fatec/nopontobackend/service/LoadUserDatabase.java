@@ -1,12 +1,12 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.fatec.noPontoBackend.model.Users;
-import com.fatec.noPontoBackend.model.IUserRepository;
+import com.fatec.nopontobackend.model.Users;
+import com.fatec.nopontobackend.model.IUserRepository;
 
 import java.util.Arrays;
 @Configuration

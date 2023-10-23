@@ -1,6 +1,6 @@
-package com.fatec.noPontoBackend.controller;
+package com.fatec.nopontobackend.controller;
 
-import com.fatec.noPontoBackend.service.IItemService;
+import com.fatec.nopontobackend.service.IItemService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
