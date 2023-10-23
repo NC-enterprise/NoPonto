@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { MapContainer, TileLayer } from "react-leaflet";
-import './leaflet.css'
+import '../../styles/leaflet.css'
 
 export default function PartnerBrand() {
     const [formData, setFormData] = useState({

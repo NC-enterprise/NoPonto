@@ -20,9 +20,9 @@ public class APIPointController {
     @Autowired
     IPointService pointService;
 
-    @CrossOrigin
-    @GetMapping
-    public ResponseEntity<Object> consultaTodos(){
+     @CrossOrigin
+     @GetMapping
+     public ResponseEntity<Object> consultaTodos(){
         logger.info(">>>>>> apicontroller consulta todos");
         return ResponseEntity.status(HttpStatus.OK).body(pointService.consultaPontosDeColeta());
     }
@@ -46,10 +46,16 @@ public class APIPointController {
         }
     }
 
-    @CrossOrigin
+
     @GetMapping("/material")
     public ResponseEntity<List<Point>> getPontosPorMaterial(@RequestParam List<Long> materialIds) {
         List<Point> pontos = pointService.getPontosPorMaterial(materialIds);
         return new ResponseEntity<>(pontos, HttpStatus.OK);
+    }
+    @CrossOrigin
+    @GetMapping("/pornome")
+    public ResponseEntity<List<Point>> searchPointByName(@RequestParam("name") String name) {
+        List<Point> points = pointService.consultaPorNome(name);
+        return ResponseEntity.ok(points);
     }
 }

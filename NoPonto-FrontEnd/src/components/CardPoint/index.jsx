@@ -1,5 +1,5 @@
 import { ClockIcon, PhoneIcon, HomeIcon, DevicePhoneMobileIcon, LightBulbIcon, NewspaperIcon, Battery0Icon } from '@heroicons/react/24/solid'
-import ConverteBase64ToImage from "./ConverteBase64ToImage";
+import ConverteBase64ToImage from "../../utils/ConverteBase64ToImage";
 import { Link } from 'react-router-dom';
 
 export default function CardPoint(props) {
@@ -12,6 +12,7 @@ export default function CardPoint(props) {
       <div className="rounded overflow-hidden shadow-lg">
         <img
           className="w-full"
+          style={{ height: "250px" }}
           src={imageUrl}
           alt="" />
         <div className="px-4 py-6 mb-2">

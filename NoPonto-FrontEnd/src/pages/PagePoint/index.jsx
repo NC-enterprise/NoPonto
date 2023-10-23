@@ -1,7 +1,7 @@
 import React from 'react';
 import { ClockIcon, PhoneIcon, HomeIcon, DevicePhoneMobileIcon, LightBulbIcon, NewspaperIcon, Battery0Icon } from '@heroicons/react/24/solid'
 import { useParams } from 'react-router-dom';
-import ConverteBase64ToImage from "./ConverteBase64ToImage";
+import ConverteBase64ToImage from "../../utils/ConverteBase64ToImage";
 
 function PagePoint() {
     const { id } = useParams();

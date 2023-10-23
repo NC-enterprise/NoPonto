@@ -28,10 +28,9 @@ public class PointService implements IPointService {
     }
 
     @Override
-    public Optional<Point> consultaPorNome(String name) {
-        return Optional.empty();
+    public List<Point> consultaPorNome(String name) {
+        return repository.findAllByNameIgnoreCaseContaining(name);
     }
-
     @Override
     public List<Point> getPontosPorMaterial(List<Long> materialIds) {
         return repository.findByItemsIn(materialIds);

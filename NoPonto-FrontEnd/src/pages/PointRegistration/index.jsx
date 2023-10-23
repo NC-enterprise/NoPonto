@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import './leaflet.css'
+import '../../styles/leaflet.css'
 import './style.css'
 
 export default function PartnerBrand() {

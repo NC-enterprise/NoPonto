@@ -1,12 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React from 'react';
 import CardPoint from '../../components/CardPoint'
+import { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/20/solid'
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon, divIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import { TERipple } from 'tw-elements-react';
-import '../../styles/leaflet.css'
+import './leaflet.css'
 import pontoImage from '../../assets/ponto.png';
 
 const sortOptions = [
@@ -15,6 +16,13 @@ const sortOptions = [
   { name: 'Mais recente', href: '#', current: false },
   { name: 'Distância', href: '#', current: false },
 ]
+// const options = [
+//   { value: '1', label: 'Baterias', checked: false },
+//   { value: '2', label: 'Eletronicos', checked: false },
+//   { value: '3', label: 'Oleo', checked: false },
+//   { value: '4', label: 'Lampadas', checked: false },
+//   { value: '5', label: 'Papeis-Papelao', checked: false },
+// ]
 
 const customIcon = new Icon({
   iconUrl: pontoImage,
@@ -41,28 +49,20 @@ function Point() {
   const [erro, setErro] = React.useState(null);
   const [selectedMaterials, setSelectedMaterials] = useState([]);
 
+  // const handleMaterialChange = (value) => {
+  //   if (selectedMaterials.includes(value)) {
+  //     setSelectedMaterials(selectedMaterials.filter((material) => material !== value));
+  //   } else {
+  //     setSelectedMaterials([...selectedMaterials, value]);
+  //   }
+  // };
+
   // pesquisa pelo nome
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isSearching, setIsSearching] = useState(false);
 
-
-  // Função para realizar a pesquisa
-  const handleSearch = async () => {
-    setIsSearching(true);
-    try {
-      const response = await fetch(`http://localhost:8080/api/v1/pontos/pornome?name=${searchQuery}`);
-      if (!response.ok) {
-        throw new Error('Erro na solicitação.');
-      }
-      const data = await response.json();
-      setSearchResults(data);
-    } catch (error) {
-      console.error('Erro durante a pesquisa:', error);
-    }
-  };
-
-  const pontosExibidos = isSearching ? searchResults : pontos;
+  const pontosFiltrados = pontos.filter((point) =>
+  point.name.toLowerCase().includes(searchQuery.toLowerCase())
+);
 
   //função geo
   React.useEffect(() => {
@@ -176,55 +176,71 @@ function Point() {
 
             </div>
           </div>
-          {/* Pesquisa */}
-          <div className="mt-10 mb-3 max-w-3xl mx-auto">
-            <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-              <input
-                type="search"
-                className="relative m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
-                placeholder="Pesquisar pelo nome"
-                aria-label="Search"
-                aria-describedby="button-addon1"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-
-              {/* <!--Botão de pesquisa--> */}
-              <TERipple color="light">
-                <button
-                  onClick={handleSearch}
-                  className="relative z-[2] flex items-center rounded-r bg-primary px-6 py-2.5 text-xs font-medium uppercase leading-tight bg-colorAccent text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
-                  type="button"
-                  id="button-addon1"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    className="h-5 w-5"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
-              </TERipple>
-
-            </div>
-          </div>
 
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
-
+            <h2 id="products-heading" className="sr-only">
+              Products
+            </h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              <div className="lg:col-span-4">
+              {/* <div>
+                {options.map((option) => (
+                  <div key={option.value}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        value={option.value}
+                        checked={selectedMaterials.includes(option.value)}
+                        onChange={() => handleMaterialChange(option.value)}
+                      />
+                      {option.label}
+                    </label>
+                  </div>
+                ))}
+              </div> */}
+
+
+              {/* Product grid */}
+
+              <div className="lg:col-span-3">
+                <div className="mb-3 md:w-96">
+                  <div className="relative mb-4 flex w-full flex-wrap items-stretch">
+                    <input
+                      type="search"
+                      className="relative m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
+                      placeholder="Pesquisar"
+                      aria-label="Search"
+                      aria-describedby="button-addon1"
+                      value={searchQuery} // Vincule o valor do campo de pesquisa ao estado searchQuery
+                      onChange={(e) => setSearchQuery(e.target.value)} // Atualize o estado da pesquisa quando o campo for alterado
+                    />
+
+                    {/* <!--Search button--> */}
+                    <TERipple color='light'>
+                      <button
+                        className="relative z-[2] flex items-center rounded-r bg-primary px-6 py-2.5 text-xs font-medium uppercase leading-tight bg-colorAccent text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-700 hover:shadow-lg focus:bg-primary-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary-800 active:shadow-lg"
+                        type="button"
+                        id="button-addon1">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          className="h-5 w-5">
+                          <path
+                            fillRule="evenodd"
+                            d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                            clipRule="evenodd" />
+                        </svg>
+                      </button>
+                    </TERipple>
+                  </div>
+                </div>
                 <div className='pb-8'>
+
                   <MapContainer
                     center={initialPosition}
                     zoom={13}
-                    style={{ height: '350px', width: '100%' }}
+                    style={{ height: '300px', width: '100%' }}
                   >
                     <TileLayer
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -244,13 +260,9 @@ function Point() {
                 </div>
                 <div className='p-15 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8'>
 
-                  {isSearching && searchResults.length === 0 ? (
-                    <li>Nenhum ponto encontrado.</li>
-                  ) : (
-                    pontosExibidos.map((point, index) => (
-                      <CardPoint key={point.id} point={point} />
-                    ))
-                  )}
+                  {pontos.map((point, index) => (
+                    <CardPoint key={index} point={point} />
+                  ))}
 
                 </div >
               </div>

@@ -24,4 +24,6 @@ public interface IPointRepository extends JpaRepository<Point, Long> {
     void associatePointWithItem(@Param("pointId") Long pointId, @Param("itemId") Long itemId);
 
     List<Point> findByItemsIn(List<Long> materialIds);
+
+    List<Point> findByNameContaining(String name);
 }
