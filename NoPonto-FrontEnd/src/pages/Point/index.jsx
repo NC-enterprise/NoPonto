@@ -51,7 +51,7 @@ function Point() {
   const handleSearch = async () => {
     setIsSearching(true);
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/pontos/pornome?name=${searchQuery}`);
+      const response = await fetch(searchURL);
       if (!response.ok) {
         throw new Error('Erro na solicitação.');
       }
@@ -61,6 +61,48 @@ function Point() {
       console.error('Erro durante a pesquisa:', error);
     }
   };
+
+  // pesquisa pelo material
+  const [selectedMaterialIds, setSelectedMaterialIds] = useState([]);
+  const [materials, setMaterials] = React.useState([]);
+  const materialQuery = selectedMaterialIds.join(',');
+  const searchURL = `http://localhost:8080/api/v1/pontos/pornome?name=${searchQuery}&materials=${materialQuery}`;
+
+  const handleMaterialSelection = (materialId) => {
+    if (selectedMaterialIds.includes(materialId)) {
+      setSelectedMaterialIds(selectedMaterialIds.filter((id) => id !== materialId));
+    } else {
+      setSelectedMaterialIds([...selectedMaterialIds, materialId]);
+    }
+  };
+
+  useEffect(() => {
+    const consulta = async () => {
+      try {
+        let url = "http://localhost:8080/api/v1/pontos";
+  
+        if (selectedMaterialIds.length > 0) {
+          url += `?materiais=${selectedMaterialIds.join(',')}`;
+        }
+  
+        const resposta = await fetch(url);
+  
+        if (!resposta.ok) {
+          throw new Error();
+        }
+  
+        const dados = await resposta.json();
+        setPontos(dados);
+      } catch (error) {
+        setErro(error.message);
+      }
+    };
+  
+    consulta();
+  }, [selectedMaterialIds]);
+  
+
+
 
   const pontosExibidos = isSearching ? searchResults : pontos;
 
@@ -99,7 +141,7 @@ function Point() {
 
         if (selectedMaterials.length > 0) {
 
-          url += `?materiais=${selectedMaterials}`;
+          url += `?pormateriais=${selectedMaterials}`;
         }
 
         const resposta = await fetch(url);
@@ -174,6 +216,7 @@ function Point() {
                 </Transition>
               </Menu>
 
+
             </div>
           </div>
           {/* Pesquisa */}
@@ -243,9 +286,20 @@ function Point() {
                   </MapContainer>
                 </div>
                 <div className='p-15 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8'>
+                  {materials.map((material) => (
+                    <label key={material.id}>
+                      <input
+                        type="checkbox"
+                        value={material.id}
+                        checked={selectedMaterialIds.includes(material.id)}
+                        onChange={() => handleMaterialSelection(material.id)}
+                      />
 
+                      {material.name}
+                    </label>
+                  ))}
                   {isSearching && searchResults.length === 0 ? (
-                    <li>Nenhum ponto encontrado.</li>
+                    <h1>Nenhum ponto encontrado.</h1>
                   ) : (
                     pontosExibidos.map((point, index) => (
                       <CardPoint key={point.id} point={point} />

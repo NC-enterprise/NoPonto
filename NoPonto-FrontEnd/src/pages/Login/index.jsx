@@ -1,5 +1,5 @@
-import { React, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { sendPasswordResetEmail } from 'firebase/auth';
 import { auth } from '../../services/firebaseConfig';
@@ -7,6 +7,11 @@ import { auth } from '../../services/firebaseConfig';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  const [errorText, setErrorText] = useState(null);
+
 
   const [
     signInWithEmailAndPassword,
@@ -17,8 +22,27 @@ function Login() {
 
   function handleSignIn(e) {
     e.preventDefault();
-    signInWithEmailAndPassword(email, password);
+    signInWithEmailAndPassword(email, password)
+      .then(() => {
+        navigate('/dashboard');
+        // if (user) {
+        //   navigate('/dashboard');
+        // } else {
+        //   setErrorText('Ocorreu um erro ao fazer login. Tente novamente.');
+        // }
+      })
+      .catch((error) => {
+        // Tratar erros
+        if (error.code === 'auth/user-not-found') {
+          setErrorText('Usuário não encontrado. Verifique seu e-mail.');
+        } else if (error.code === 'auth/wrong-password') {
+          setErrorText('Senha incorreta. Verifique sua senha.');
+        } else {
+          setErrorText('Ocorreu um erro ao fazer login. Tente novamente.');
+        }
+      });
   }
+  
 
   // função de Esqueci a senha 
   async function handleForgotPassword(e) {
@@ -40,7 +64,13 @@ function Login() {
   }
   return (
     <div className="min-h-screen py-40 bg-colorLightGrey2">
+     
       <div className="container mx-auto">
+      <div className='lg:flex-row w-10/12 lg:w-8/12 mb-5 mx-auto'>
+      {errorText && (
+        <p className="text-2xl font-bold text-red-500">{errorText}</p>
+      )}
+      </div>
         <div className="flex flex-col lg:flex-row w-10/12 lg:w-8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
 
           <div className="w-full lg:w-1/2 py-16 px-12">
@@ -65,7 +95,11 @@ function Login() {
                     id="email"
                     name="email"
                     className="p-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      setErrorText(null);
+                    }}
+                    
                   />
                 </div>
               </div>
@@ -89,7 +123,10 @@ function Login() {
                     id="password"
                     name="password"
                     className="p-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6"
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setErrorText(null);
+                    }}
                   />
                 </div>
               </div>
@@ -111,6 +148,7 @@ function Login() {
           </div>
         </div>
       </div>
+      
     </div>
   );
 }

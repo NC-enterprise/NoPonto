@@ -10,6 +10,7 @@ import point from './point';
 import pagePoint from './pagePoint';
 import partnerBrand from './PartnerBrand';
 import pointRegistration from './pointRegistration';
+import dashboardRoutes from './dashboard';
 
   
   const routes = [{
@@ -41,6 +42,7 @@ import pointRegistration from './pointRegistration';
           ...login,
           ...signUp,
           ...routes,
+          ...dashboardRoutes,
         ],
       },
     ]);

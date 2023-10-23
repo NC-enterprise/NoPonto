@@ -8,6 +8,7 @@ function SignUp() {
   const [password, setPassword] = useState('');
   const [nome, setNome] = useState('');
   const [sobrenome, setSobrenome] = useState('');
+  const [errorText, setErrorText] = useState('');
 
   const [
     createUserWithEmailAndPassword,
@@ -16,11 +17,36 @@ function SignUp() {
     error,
   ] = useCreateUserWithEmailAndPassword(auth);
 
-  function handleSignOut(e) {
+  const handleSignOut = async (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(email, password, {
-      displayName: `${nome} ${sobrenome}`
-    });
+
+    if (!email || !password || !nome || !sobrenome) {
+      setErrorText('Todos os campos são obrigatórios.');
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorText('A senha deve conter pelo menos 6 caracteres.');
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(email, password, {
+        displayName: `${nome} ${sobrenome}`
+      });
+
+      if (userCredential) {
+        // O registro foi bem-sucedido, você pode redirecionar para a página de login ou outra ação necessária
+      }
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        setErrorText('Este e-mail já está em uso por outra conta.');
+      } else if (error.code === 'auth/invalid-email') {
+        setErrorText('O e-mail informado é inválido.');
+      } else {
+        setErrorText('Ocorreu um erro ao criar a conta. Tente novamente.');
+      }
+    }
   }
 
   if (loading) {
@@ -125,6 +151,11 @@ function SignUp() {
               <button onClick={handleSignOut} className="w-full rounded-md bg-colorMidGreen px-14 py-2 text-base font-semibold text-white shadow-sm hover:bg-colorDarkGreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorDarkGreen">Registrar</button>
             </div>
           </div>
+        </div>
+        <div className='lg:flex-row w-10/12 lg:w-8/12 mt-5 mx-auto'>
+          {errorText && (
+            <p className="text-2xl font-bold text-red-500">{errorText}</p>
+          )}
         </div>
       </div>
     </div>
