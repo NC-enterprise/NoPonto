@@ -11,6 +11,7 @@ import pagePoint from './pagePoint';
 import partnerBrand from './PartnerBrand';
 import pointRegistration from './pointRegistration';
 import dashboardRoutes from './dashboard';
+import pagePartnerBrand from './pagePartnerBrand';
 
   
   const routes = [{
@@ -27,7 +28,8 @@ import dashboardRoutes from './dashboard';
       ...point,
       ...pagePoint,
       ...partnerBrand,
-      ...pointRegistration
+      ...pointRegistration,
+      ...pagePartnerBrand
     ],
   }];
   
