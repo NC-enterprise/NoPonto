@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import CardPoint from '../../components/CardPoint'
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
@@ -34,7 +34,7 @@ function classNames(...classes) {
 
 function Point() {
   const [initialPosition, setInitialPosition] = useState([0, 0]);
-
+  const mapRef = useRef(null); 
 
   const [pontos, setPontos] = React.useState([]);
   const [localPonto, setLocalPonto] = React.useState([]);
@@ -100,9 +100,6 @@ function Point() {
   
     consulta();
   }, [selectedMaterialIds]);
-  
-
-
 
   const pontosExibidos = isSearching ? searchResults : pontos;
 
@@ -119,6 +116,7 @@ function Point() {
       }
     );
   }, []);
+
 
 
   React.useEffect(() => {
@@ -264,26 +262,33 @@ function Point() {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               <div className="lg:col-span-4">
                 <div className='pb-8'>
+                {initialPosition[0] !== 0 && initialPosition[1] !== 0 && (
                   <MapContainer
-                    center={initialPosition}
-                    zoom={13}
-                    style={{ height: '350px', width: '100%' }}
+                  center={initialPosition}
+                  zoom={13}
+                  style={{ height: '350px', width: '100%' }}
+                  whenCreated={mapInstance => (mapRef.current = mapInstance)}
+                  onLocationfound={e => {
+                    const { lat, lng } = e.latlng;
+                    setInitialPosition([lat, lng]);
+                  }}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  <MarkerClusterGroup
+                    chunkedLoading
+                    iconCreateFunction={createClusterCustomIcon}
                   >
-                    <TileLayer
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    <MarkerClusterGroup
-                      chunkedLoading
-                      iconCreateFunction={createClusterCustomIcon}
-                    >
-                      {localPonto.map((local) => (
-                        <Marker key={local.name} position={[local.latitude, local.longitude]} icon={customIcon}>
-                          <Popup>{local.name}</Popup>
-                        </Marker>
-                      ))}
-                    </MarkerClusterGroup>
-                  </MapContainer>
+                    {localPonto.map((local) => (
+                      <Marker key={local.name} position={[local.latitude, local.longitude]} icon={customIcon}>
+                        <Popup>{local.name}</Popup>
+                      </Marker>
+                    ))}
+                  </MarkerClusterGroup>
+                </MapContainer>
+                )}
                 </div>
                 <div className='p-15 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8'>
                   {materials.map((material) => (
