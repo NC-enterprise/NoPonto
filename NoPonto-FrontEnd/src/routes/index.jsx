@@ -31,7 +31,10 @@ import pagePartnerBrand from './pagePartnerBrand';
       ...pointRegistration,
       ...pagePartnerBrand
     ],
-  }];
+  },
+  ...dashboardRoutes,
+  ...point,
+];
   
   export default function RoutesApp() {
     const router = createBrowserRouter([
@@ -44,7 +47,6 @@ import pagePartnerBrand from './pagePartnerBrand';
           ...login,
           ...signUp,
           ...routes,
-          ...dashboardRoutes,
         ],
       },
     ]);

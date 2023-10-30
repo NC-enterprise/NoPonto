@@ -10,7 +10,10 @@ function PagePoint() {
     const [erro, setErro] = React.useState(null);
     const imageUrl = ConverteBase64ToImage(ponto.image, 'image/png');
 
-    console.log(ponto)
+    const abrirWhatsApp = () => {
+        const linkWhatsApp = `https://api.whatsapp.com/send?phone=${ponto.whatsapp}`;
+        window.open(linkWhatsApp);
+    };
 
 
     React.useEffect(() => {
@@ -70,8 +73,6 @@ function PagePoint() {
                         <span>{ponto.endereco}</span>
                     </div>
 
-
-
                     {/* Instruções de Triagem: */}
                     <h3 className='mt-8 text-xl font-semibold md:text-lg mb-1'>Instruções de Triagem:</h3>
                     <div className='text-base w-10/12'>
@@ -104,6 +105,7 @@ function PagePoint() {
                         </Link>
                         <button
                             className="rounded-md bg-colorMidGreen hover:bg-colorAccent2 px-10 py-2 text-sm font-semibold text-white shadow-sm"
+                            onClick={abrirWhatsApp}
                         >
                             Entrar em contato
                         </button>

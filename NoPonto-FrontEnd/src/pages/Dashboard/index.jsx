@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { CursorArrowRaysIcon } from '@heroicons/react/24/solid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const user = {
     name: '',
@@ -11,10 +11,10 @@ const user = {
         'https://images.pexels.com/photos/2773977/pexels-photo-2773977.jpeg?auto=compress&cs=tinysrgb&w=300',
 }
 const navigation = [
-    { name: 'Dashboard', href: '#', current: true },
-    { name: 'Meus pontos', href: '#', current: false },
-    { name: 'Recompensas', href: '#', current: false },
-    { name: 'Buscar pontos', href: '#', current: false },
+    { name: 'Dashboard', to: '#', current: true },
+    { name: 'Meus pontos', to: '#', current: false },
+    { name: 'Recompensas', to: '#', current: false },
+    { name: 'Buscar pontos', to: '/point', current: false },
 ]
 const userNavigation = [
     { name: 'Seu perfil', href: '#' },
@@ -50,9 +50,9 @@ export default function Dashboard() {
                                         <div className="hidden md:block">
                                             <div className="ml-10 flex items-baseline space-x-4">
                                                 {navigation.map((item) => (
-                                                    <a
+                                                    <Link
                                                         key={item.name}
-                                                        href={item.href}
+                                                        to={item.href}
                                                         onClick={item.name === 'Sair' ? handleLogout : null}
                                                         className={classNames(
                                                             item.current
@@ -63,7 +63,7 @@ export default function Dashboard() {
                                                         aria-current={item.current ? 'page' : undefined}
                                                     >
                                                         {item.name}
-                                                    </a>
+                                                    </Link>
                                                 ))}
                                             </div>
                                         </div>
@@ -93,8 +93,8 @@ export default function Dashboard() {
                                                         {userNavigation.map((item) => (
                                                             <Menu.Item key={item.name}>
                                                                 {({ active }) => (
-                                                                    <a
-                                                                        href={item.href}
+                                                                    <Link
+                                                                        to={item.href}
                                                                         onClick={item.name === 'Sair' ? handleLogout : null}
                                                                         className={classNames(
                                                                             active ? 'bg-gray-100' : '',
@@ -102,7 +102,7 @@ export default function Dashboard() {
                                                                         )}
                                                                     >
                                                                         {item.name}
-                                                                    </a>
+                                                                    </Link>
                                                                 )}
                                                             </Menu.Item>
                                                         ))}
@@ -143,7 +143,7 @@ export default function Dashboard() {
                                             <Disclosure.Button
                                                 key={item.name}
                                                 as="a"
-                                                href={item.href}
+                                                to={item.href}
                                                 onClick={item.name === 'Sair' ? handleLogout : null}
                                                 className="block rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                                             >

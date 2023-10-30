@@ -21,7 +21,7 @@ const PartnerCarrossel = () => {
                     },
                  
                     700: {
-                        slidesPerView: 2.8,
+                         slidesPerView: 2.8,
                         spaceBetween: 5,
                     },
                     900: {
