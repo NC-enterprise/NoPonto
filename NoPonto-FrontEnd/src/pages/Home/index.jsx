@@ -9,7 +9,7 @@ function Home() {
     <div>
       <Hero />
       <Section />
-      {/* <Section2 /> */}
+      <Section2 />
       <PartnerCarrossel />
     </div>
   );

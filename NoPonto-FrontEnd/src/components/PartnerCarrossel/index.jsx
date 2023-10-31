@@ -88,7 +88,7 @@ const PartnerCarrossel = () => {
                 {marcas.map((item) => (
                     <SwiperSlide key={item.id}>
                         <div className="bg-white flex flex-col gap-6 mb-20 group relative shadow-lg text-white rounded-xl px-6 py-2 h-[290px] w-[220px] overflow-hidden cursor-pointer">
-                            <div className="logo-image">
+                            <div className="logo-image mt-10">
                                 <img
                                     className="mx-auto w-100% h-auto max-w-[200px] sm:max-w-[120px]"
                                     src={ConverteBase64ToImage(item.imagem, 'image/jpg')}

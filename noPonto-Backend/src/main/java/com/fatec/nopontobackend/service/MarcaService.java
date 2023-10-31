@@ -19,4 +19,9 @@ public class MarcaService implements IMarcaService{
 
     @Override
     public Optional<Marca> consultaPorId(Long id){return Optional.empty();}
+
+    @Override
+    public Marca cadastrarMarca(Marca marca) {
+        return repositoryM.save(marca);
+    }
 }

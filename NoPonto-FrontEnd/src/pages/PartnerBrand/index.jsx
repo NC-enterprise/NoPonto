@@ -1,40 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { Icon, divIcon, point } from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
+import { TERipple } from 'tw-elements-react';
 import '../../styles/leaflet.css'
+import pontoImage from '../../assets/ponto.png';
+
 
 export default function PartnerBrand() {
-    const [formData, setFormData] = useState({
-        nome: "Ponto de Coleta 5",
-        endereco: "Rua da Reciclagem, 123",
-        latitude: -23.456789,
-        longitude: -45.678901,
-        horarioFuncionamento: "Segunda a Sexta 08:00 - 18:00, Sábado 09:00 - 13:00",
-        materiaisAceitos: ["Papel", "Vidro", "Plástico"],
-        instrucoesTriagem: "Instruções de triagem para ponto 1",
-        responsavel: "Responsável 1",
-        contatoTelefone: "+55 (11) 1234-5678",
-        contatoEmail: "contato@ponto1.com",
-        site: "www.ponto1.com",
-        acessibilidade: true,
-        recursosNoLocal: ["Máquina de Compactação", "Recipientes Especiais"],
-        parcerias: ["Parceria 1", "Parceria 2"],
-        fotos: ["url_imagem_1.jpg", "url_imagem_2.jpg"],
-        statusOperacao: "Aberto",
-        licencaAutorizacao: "Licença XYZ-12345",
-        historicoManutencao: ["Manutenção 1", "Manutenção 2"],
+    const [ufs, setUfs] = useState([]);
+    const [cities, setCities] = useState([]);
 
-        redesSociais: {
-            facebook: "",
-            instagram: "",
-            twitter: "",
-            linkedin: "",
-        },
+    const [selectedUf, setSelectedUf] = useState('0');
+    const [selectedCity, setSelectedCity] = useState('0');
+
+    const [formData, setFormData] = useState({
+        nome: '',
+        email: '',
+        website: '',
+        imagens: [],
+        descricao: '',
+        // autorizacao: '',
+        // documentoLegal: '',
+        telefone: '',
+
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        linkedin: '',
+
+        endereco: '',
+        estado: '',
+        cidade: '',
     });
     const [mensage, setMensagem] = useState(String);
 
-    const [tipoCadastro, setTipoCadastro] = useState(String);
     const [dataFromChild, setDataFromChild] = useState(null);
+
+
+
+
 
     console.log(dataFromChild);
 
@@ -44,24 +50,24 @@ export default function PartnerBrand() {
     };
 
 
-    const handlePointRegistration = async () => {
-        const ponto = formData;
+    const handleBrandRegistration = async () => {
+        const marca = formData;
         try {
-            const resposta = await fetch("http://localhost:8080/api/v1/pontos/new", {
+            const resposta = await fetch("http://localhost:8080/api/v1/marcas/new", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(ponto),
+                body: JSON.stringify(marca),
             });
             console.log(resposta.status);
             if (!resposta.ok) {
-                throw new Error("Erro ao cadastrar o ponto.");
+                throw new Error("Erro ao cadastrar a marca.");
             }
-            setMensagem("Ponto cadastrado com sucesso!");
+            setMensagem("Marca cadastrada com sucesso!");
         } catch (error) {
             setMensagem(
-                `${error} Erro ao cadastrar o ponto. Verifique os dados informados`
+                `${error} Erro ao cadastrar a marca. Verifique os dados informados`
             );
         }
 
@@ -76,10 +82,100 @@ export default function PartnerBrand() {
         });
     };
 
-    const position = [-23.6867, -46.6223];
+    const customIcon = new Icon({
+        iconUrl: pontoImage,
+        iconSize: [38, 38]
+    });
+    // custom cluster icon
+    const createClusterCustomIcon = function (cluster) {
+        return new divIcon({
+            html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
+            className: "custom-marker-cluster",
+            iconSize: point(33, 33, true)
+        });
+    };
+
+    const [initialPosition, setInitialPosition] = useState([0, 0]);
+    const [localPonto, setLocalPonto] = React.useState([]);
+    const mapRef = useRef(null);
+
+    //função geo
+    React.useEffect(() => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setInitialPosition([latitude, longitude]);
+            },
+            (error) => {
+                console.error(error);
+                setInitialPosition([0, 0]);
+            }
+        );
+    }, []);
+
+    // Função para buscar as UFs do IBGE
+    useEffect(() => {
+
+        const fetchUfsFromIBGE = async () => {
+            try {
+                const response = await fetch('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar as UFs do IBGE');
+                }
+                const data = await response.json();
+                // Extrair apenas a sigla das UFs
+                const ufsList = data.map(uf => uf.sigla);
+                setUfs(ufsList);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        // Chamar a função para buscar as UFs ao montar o componente
+        fetchUfsFromIBGE();
+    }, []);
+
+    // Função para buscar as cidades da UF selecionada
+    useEffect(() => {
+
+        const fetchCitiesFromIBGE = async () => {
+            if (selectedUf) {
+                try {
+                    const response = await fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`);
+                    if (!response.ok) {
+                        throw new Error('Erro ao buscar as cidades da UF selecionada');
+                    }
+                    const data = await response.json();
+                    const citiesList = data.map(city => city.nome);
+                    setCities(citiesList);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        };
+
+        // Chamar a função para buscar as cidades quando a UF selecionada mudar
+        fetchCitiesFromIBGE();
+    }, [selectedUf]);
+
+    // upload de imagem
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const base64String = reader.result.split(',')[1];
+            setSelectedFile(base64String);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <div className="mx-auto max-w-screen-md sm:py-44 lg:py-46 md:py-46 text-colorMidGreen px-6 md:px-0">
-            <form onSubmit={handlePointRegistration} className=" space-y-12">
+            <form onSubmit={handleBrandRegistration} className=" space-y-12">
                 <div>
                     <div className="border-borderColor-900/10 pb-12">
                         <h1 className="text-colorDarkGreen text-3xl md:text-5xl font-bold leading-7 mt-6">
@@ -171,6 +267,7 @@ export default function PartnerBrand() {
                                                     name="file-upload"
                                                     type="file"
                                                     className="sr-only"
+                                                    onChange={handleImageUpload}
                                                 />
                                             </label>
                                         </div>
@@ -187,21 +284,92 @@ export default function PartnerBrand() {
                                     Endereço:
                                 </label>
                                 <div className="mt-2">
-                                    <MapContainer
-                                        center={position}
-                                        zoom={13}
-                                        style={{ height: '300px', width: '100%' }}
-                                    >
-                                        <TileLayer
-                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        />                                      
-                                    </MapContainer>
+                                    {initialPosition[0] !== 0 && initialPosition[1] !== 0 && (
+                                        <MapContainer
+                                            center={initialPosition}
+                                            zoom={14}
+                                            style={{ height: '330px', width: '100%' }}
+                                            whenCreated={mapInstance => (mapRef.current = mapInstance)}
+                                            onLocationfound={e => {
+                                                const { lat, lng } = e.latlng;
+                                                setInitialPosition([lat, lng]);
+                                            }}
+                                        >
+                                            <TileLayer
+                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                            />
+                                            <MarkerClusterGroup
+                                                chunkedLoading
+                                                iconCreateFunction={createClusterCustomIcon}
+                                            >
+                                                {localPonto.map((local) => (
+                                                    <Marker key={local.name} position={[local.latitude, local.longitude]} icon={customIcon}>
+                                                        <Popup>{local.name}</Popup>
+                                                    </Marker>
+                                                ))}
+                                            </MarkerClusterGroup>
+                                        </MapContainer>
+                                    )}
                                 </div>
                             </div>
                         </div>
                         <div className="mt-20 border-t border-gray-900/10 pb-12">
-                            <h2 className="mt-3 text-xl font-semibold leading-7">
+                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                {/* Endereço */}
+                                <div className="col-span-full">
+                                    <label
+                                        htmlFor="endereco"
+                                        className="block text-base font-medium leading-6"
+                                    >
+                                        Estado:
+                                    </label>
+                                    <div className="mt-2">
+                                        <select
+                                            value={selectedUf}
+                                            onChange={(e) => setSelectedUf(e.target.value)}
+                                        >
+                                            <option value="">Selecione uma UF</option>
+                                            {ufs.map(uf => (
+                                                <option key={uf} value={uf}>{uf}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div className="mt-2">
+                                        <select
+                                            value={selectedCity}
+                                            onChange={(e) => setSelectedCity(e.target.value)}
+                                        >
+                                            <option value="">Selecione uma cidade</option>
+                                            {cities.map(city => (
+                                                <option key={city} value={city}>{city}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                                {/* Endereço */}
+                                <div className="col-span-full">
+                                    <label
+                                        htmlFor="endereco"
+                                        className="block text-base font-medium leading-6"
+                                    >
+                                        Endereço:
+                                    </label>
+                                    <div className="mt-2">
+                                        <input
+                                            type="text"
+                                            id="endereco"
+                                            name="endereco"
+                                            value={formData.endereco}
+                                            onChange={handleInputChange}
+                                            className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <h2 className="mt-5 text-xl font-semibold leading-7">
                                 Informações da Marca
                             </h2>
 
@@ -225,7 +393,7 @@ export default function PartnerBrand() {
                                     </div>
                                 </div>
                                 {/* Autorização */}
-                                <div className="col-span-full">
+                                {/* <div className="col-span-full">
                                     <label htmlFor="autorizacao" className="block text-base font-medium leading-6">
                                         Autorização:
                                     </label>
@@ -239,9 +407,9 @@ export default function PartnerBrand() {
                                             className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
                                         />
                                     </div>
-                                </div>
+                                </div> */}
                                 {/* Documento Legal */}
-                                <div className="col-span-full">
+                                {/* <div className="col-span-full">
                                     <label
                                         htmlFor="documentoLegal"
                                         className="block text-base font-medium leading-6"
@@ -270,7 +438,7 @@ export default function PartnerBrand() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 {/* Telefone: */}
                                 <div className="col-span-full">
@@ -301,8 +469,8 @@ export default function PartnerBrand() {
                                     <input
                                         type="text"
                                         id="facebook"
-                                        name="redesSociais.facebook"
-                                        value={formData.redesSociais.facebook}
+                                        name="facebook"
+                                        value={formData.facebook}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
                                     />
@@ -315,8 +483,8 @@ export default function PartnerBrand() {
                                     <input
                                         type="text"
                                         id="instagram"
-                                        name="redesSociais.instagram"
-                                        value={formData.redesSociais.instagram}
+                                        name="instagram"
+                                        value={formData.instagram}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
                                     />
@@ -329,8 +497,8 @@ export default function PartnerBrand() {
                                     <input
                                         type="text"
                                         id="twitter"
-                                        name="redesSociais.twitter"
-                                        value={formData.redesSociais.twitter}
+                                        name="twitter"
+                                        value={formData.twitter}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
                                     />
@@ -343,8 +511,8 @@ export default function PartnerBrand() {
                                     <input
                                         type="text"
                                         id="linkedin"
-                                        name="redesSociais.linkedin"
-                                        value={formData.redesSociais.linkedin}
+                                        name="linkedin"
+                                        value={formData.linkedin}
                                         onChange={handleInputChange}
                                         className="block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-borderColor sm:text-base sm:leading-6 pl-2"
                                     />
@@ -359,12 +527,12 @@ export default function PartnerBrand() {
                         <div className="mt-6 flex items-center justify-end gap-x-6">
                             <button
                                 type="button"
-                                className="text-sm font-semibold leading-6"
-                                onClick={() => console.log(formData)}
+                                className="text-sm font-semibold leading-6"                                
                             >
                                 Cancelar
                             </button>
-                            <button className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark">
+                            <button className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark"
+                            onClick={handleBrandRegistration}>
                                 Salvar
                             </button>
                         </div>
