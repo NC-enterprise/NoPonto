@@ -5,7 +5,6 @@ import "swiper/css/pagination";
 import "swiper/css/free-mode";
 import { FreeMode, Pagination } from "swiper/modules";
 import { RxArrowTopRight } from "react-icons/rx";
-import { ServiceData } from "../../services/carrossel";
 import ConverteBase64ToImage from "../../utils/ConverteBase64ToImage";
 const PartnerCarrossel = () => {
     const [marcas, setMarcas] = React.useState([]);
@@ -53,30 +52,30 @@ const PartnerCarrossel = () => {
                          slidesPerView: 2.8,
                         spaceBetween: 5,
                     },
-                    900: {
-                        slidesPerView: 3.5,
-                        spaceBetween: 5,
-                    },
-                    950: {
-                        slidesPerView: 3.8,
-                        spaceBetween: 5,
-                    },
-                    1024:{
-                        slidesPerView: 4,
-                        spaceBetween: 5,
-                    },
-                    1124:{
-                        slidesPerView: 5,
-                        spaceBetween: 5,
-                    },
-                    1224:{
-                        slidesPerView: 5.5,
-                        spaceBetween: 5,
-                    },
-                    1553:{
-                        slidesPerView: 5.8,
-                        spaceBetween: 5,
-                    }
+                    // 900: {
+                    //     slidesPerView: 3.5,
+                    //     spaceBetween: 5,
+                    // },
+                    // 950: {
+                    //     slidesPerView: 3.8,
+                    //     spaceBetween: 5,
+                    // },
+                    // 1024:{
+                    //     slidesPerView: 4,
+                    //     spaceBetween: 5,
+                    // },
+                    // 1124:{
+                    //     slidesPerView: 5,
+                    //     spaceBetween: 5,
+                    // },
+                    // 1224:{
+                    //     slidesPerView: 5.5,
+                    //     spaceBetween: 5,
+                    // },
+                    // 1553:{
+                    //     slidesPerView: 5.8,
+                    //     spaceBetween: 5,
+                    // }
                     
                 }}
                 freeMode={true}
