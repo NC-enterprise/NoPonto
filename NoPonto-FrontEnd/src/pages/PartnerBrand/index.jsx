@@ -53,7 +53,7 @@ export default function PartnerBrand() {
     const handleBrandRegistration = async () => {
         const marca = formData;
         try {
-            const resposta = await fetch("http://localhost:8080/api/v1/marcas/new", {
+            const resposta = await fetch("http://localhost:8080/api/v1/marca/new", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
