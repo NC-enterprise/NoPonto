@@ -265,7 +265,7 @@ function Point() {
                 {initialPosition[0] !== 0 && initialPosition[1] !== 0 && (
                   <MapContainer
                   center={initialPosition}
-                  zoom={13}
+                  zoom={14}
                   style={{ height: '350px', width: '100%' }}
                   whenCreated={mapInstance => (mapRef.current = mapInstance)}
                   onLocationfound={e => {

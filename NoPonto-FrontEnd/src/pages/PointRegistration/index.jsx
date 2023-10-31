@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import { PhotoIcon } from "@heroicons/react/24/solid";
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { Icon, divIcon, point } from "leaflet";
+import MarkerClusterGroup from "react-leaflet-cluster";
 import '../../styles/leaflet.css'
 import './style.css'
+import pontoImage from '../../assets/ponto.png';
 
 export default function PartnerBrand() {
     const [items, setItems] = useState([]);
@@ -12,7 +15,10 @@ export default function PartnerBrand() {
     const [selectedUf, setSelectedUf] = useState('0');
     const [selectedItems, setSelectedItems] = useState([]);
     const [selectedCity, setSelectedCity] = useState('0');
-    const [initialPosition, setInitialPosition] = useState([0,0]);
+    const [initialPosition, setInitialPosition] = useState([0, 0]);
+    const [localPonto, setLocalPonto] = React.useState([]);
+    const mapRef = useRef(null);
+
     const [selectedPosition, setSelectedPosition] = useState(initialPosition);
     const [selectedFile, setSelectedFile] = useState('');
     const [formData, setFormData] = useState({
@@ -24,6 +30,19 @@ export default function PartnerBrand() {
         instrucoesTriagem: '',
     });
 
+    const customIcon = new Icon({
+        iconUrl: pontoImage,
+        iconSize: [38, 38]
+    });
+    // custom cluster icon
+    const createClusterCustomIcon = function (cluster) {
+        return new divIcon({
+            html: `<span class="cluster-icon">${cluster.getChildCount()}</span>`,
+            className: "custom-marker-cluster",
+            iconSize: point(33, 33, true)
+        });
+    };
+
     const [mensage, setMensagem] = useState(String);
     const [erro, setErro] = React.useState(null);
 
@@ -33,32 +52,32 @@ export default function PartnerBrand() {
     //itens 
     useEffect(() => {
         const consulta = async () => {
-          try {
-            const resposta = await fetch("http://localhost:8080/api/v1/itens");
-            if (!resposta.ok) {
-              throw new Error();
+            try {
+                const resposta = await fetch("http://localhost:8080/api/v1/itens");
+                if (!resposta.ok) {
+                    throw new Error();
+                }
+
+                const dados = await resposta.json();
+                setItems(dados);
+            } catch (error) {
+                setErro(error.message);
+                console.log(erro)
             }
-    
-            const dados = await resposta.json();
-            setItems(dados);
-          } catch (error) {
-            setErro(error.message);
-            console.log(erro)
-          }
         };
         consulta();
-      }, []);
+    }, []);
 
     //selecionar itens
     function handleSelectedItem(id) {
         const alreadySelected = selectedItems.includes(id);
         if (alreadySelected) {
-          const filteredItems = selectedItems.filter(item => item !== id);
-          setSelectedItems(filteredItems);
+            const filteredItems = selectedItems.filter(item => item !== id);
+            setSelectedItems(filteredItems);
         } else {
-          setSelectedItems([...selectedItems, id]);
+            setSelectedItems([...selectedItems, id]);
         }
-      }
+    }
 
     // Função para buscar as UFs do IBGE
     useEffect(() => {
@@ -106,14 +125,14 @@ export default function PartnerBrand() {
     }, [selectedUf]);
 
     //função geo
-    useEffect(() => {
+    React.useEffect(() => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                const {latitude, longitude} = position.coords;
+                const { latitude, longitude } = position.coords;
                 setInitialPosition([latitude, longitude]);
             },
             (error) => {
-              console.error(error);
+                console.error(error);
                 setInitialPosition([0, 0]);
             }
         );
@@ -164,16 +183,16 @@ export default function PartnerBrand() {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         const reader = new FileReader();
-       
+
         reader.onload = () => {
-            const base64String = reader.result.split(',')[1];      
+            const base64String = reader.result.split(',')[1];
             setSelectedFile(base64String);
         };
 
-         if (file) {
+        if (file) {
             reader.readAsDataURL(file);
         }
-      };
+    };
 
 
     const handleInputChange = (e) => {
@@ -296,26 +315,33 @@ export default function PartnerBrand() {
                                 Endereço:
                             </label>
                             <div className="mt-2">
-                                <MapContainer
-                                    center={initialPosition}
-                                    zoom={13}
-                                    style={{ height: '300px', width: '100%' }}
-                                >
-                                    <TileLayer
-                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
-                                    <Marker position={initialPosition}
-                                        draggable={true}
-                                        onDragEnd={(e) => {
-                                            const latlng = e.target.getLatLng();
-                                            if (latlng) {
-                                                setSelectedPosition([latlng.lat, latlng.lng]);
-                                            }
+                                {initialPosition[0] !== 0 && initialPosition[1] !== 0 && (
+                                    <MapContainer
+                                        center={initialPosition}
+                                        zoom={14}
+                                        style={{ height: '350px', width: '100%' }}
+                                        whenCreated={mapInstance => (mapRef.current = mapInstance)}
+                                        onLocationfound={e => {
+                                            const { lat, lng } = e.latlng;
+                                            setInitialPosition([lat, lng]);
                                         }}
-                                        
-                                    />
-                                </MapContainer>
+                                    >
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        <MarkerClusterGroup
+                                            chunkedLoading
+                                            iconCreateFunction={createClusterCustomIcon}
+                                        >
+                                            {localPonto.map((local) => (
+                                                <Marker key={local.name} position={[local.latitude, local.longitude]} icon={customIcon}>
+                                                    <Popup>{local.name}</Popup>
+                                                </Marker>
+                                            ))}
+                                        </MarkerClusterGroup>
+                                    </MapContainer>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -385,12 +411,11 @@ export default function PartnerBrand() {
                                 <div className="col-span-full">
                                     <ul className="grid grid-cols-3 gap-4 items-grid">
                                         {items.map(item => (
-                                            <li  
+                                            <li
                                                 key={item.id}
                                                 onClick={() => handleSelectedItem(item.id)}
-                                                className={`${
-                                                    selectedItems.includes(item.id) ? "selected" : ""
-                                                  } bg-colorGreen p-4 flex flex-col justify-between items-center cursor-pointer`}
+                                                className={`${selectedItems.includes(item.id) ? "selected" : ""
+                                                    } bg-colorGreen p-4 flex flex-col justify-between items-center cursor-pointer`}
                                             >
                                                 <img src={`data:image/svg+xml;base64,${item.imagem}`} alt={item.title} />
                                                 <span>{item.nome}</span>
@@ -450,9 +475,9 @@ export default function PartnerBrand() {
                             className="text-sm font-semibold leading-6">
                             Cancelar
                         </button>
-                        <button 
-                        className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark"                         
-                        onClick={handlePointRegistration}>
+                        <button
+                            className="rounded-md bg-colorMidGreen px-10 py-2 text-sm font-semibold text-white shadow-sm hover:bg-colorBackgroundDark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-colorBackgroundDark"
+                            onClick={handlePointRegistration}>
                             Salvar
                         </button>
                     </div>
