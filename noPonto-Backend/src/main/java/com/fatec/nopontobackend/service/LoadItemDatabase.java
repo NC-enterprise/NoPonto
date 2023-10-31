@@ -1,9 +1,7 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
-import com.fatec.noPontoBackend.model.IItemRepository;
-import com.fatec.noPontoBackend.model.IUserRepository;
-import com.fatec.noPontoBackend.model.Item;
-import com.fatec.noPontoBackend.model.Users;
+import com.fatec.nopontobackend.model.IItemRepository;
+import com.fatec.nopontobackend.model.Item;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;

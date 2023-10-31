@@ -1,13 +1,11 @@
-package com.fatec.noPontoBackend;
+package com.fatec.nopontobackend;
 
-import com.fatec.noPontoBackend.model.Point;
-import com.fatec.noPontoBackend.service.IPointService;
+import com.fatec.nopontobackend.model.Point;
+import com.fatec.nopontobackend.service.IPointService;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,9 +19,6 @@ class NoPontoBackendApplicationTests {
 	@MockBean
 	Point point;
 
-	@Test
-	void contextLoads() {
-	}
 	@Test
 	void ct_01_consulta_com_sucesso() {
 		List<Point> pontos = pointService.consultaPontosDeColeta();

@@ -1,4 +1,4 @@
-package com.fatec.noPontoBackend.controller;
+package com.fatec.nopontobackend.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fatec.noPontoBackend.model.Users;
-import com.fatec.noPontoBackend.service.IUserService;
+import com.fatec.nopontobackend.model.Users;
+import com.fatec.nopontobackend.service.IUserService;
 
 import java.util.Optional;
 
@@ -30,7 +30,7 @@ public class APIUserController {
     @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Object> consultaPorId(@PathVariable Long id) {
-        logger.info(">>>>>> apicontroller consultaPorId iniciado para o ID: " + id);
+        logger.info(">>>>>> apicontroller consultaPorId iniciado");
         Optional<Users> user = userService.consultaPorId(id);
         return user.<ResponseEntity<Object>>map(value -> ResponseEntity.status(HttpStatus.OK).body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado"));
     }
@@ -46,7 +46,7 @@ public class APIUserController {
     @CrossOrigin
     @PutMapping("/{id}")
     public ResponseEntity<Object> atualizarUsuario(@PathVariable Long id, @RequestBody Users user) {
-        logger.info(">>>>>> apicontroller atualizar usuário iniciado para o ID: " + id);
+        logger.info(">>>>>> apicontroller atualizar usuário iniciado");
         Optional<Users> usuarioAtualizado = userService.atualizar(id, user);
         if (usuarioAtualizado.isPresent()) {
             return ResponseEntity.status(HttpStatus.OK).body(usuarioAtualizado.get());
@@ -58,7 +58,7 @@ public class APIUserController {
     @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> excluirUsuario(@PathVariable Long id) {
-        logger.info(">>>>>> apicontroller excluir usuário iniciado para o ID: " + id);
+        logger.info(">>>>>> apicontroller excluir usuário iniciado");
         userService.excluir(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

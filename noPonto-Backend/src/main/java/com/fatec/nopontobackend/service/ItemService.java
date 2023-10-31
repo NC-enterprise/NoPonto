@@ -1,7 +1,7 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
-import com.fatec.noPontoBackend.model.IItemRepository;
-import com.fatec.noPontoBackend.model.Item;
+import com.fatec.nopontobackend.model.IItemRepository;
+import com.fatec.nopontobackend.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

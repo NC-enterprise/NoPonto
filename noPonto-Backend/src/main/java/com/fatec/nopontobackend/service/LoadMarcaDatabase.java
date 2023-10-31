@@ -1,7 +1,7 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
-import com.fatec.noPontoBackend.model.IMarcaRepository;
-import com.fatec.noPontoBackend.model.Marca;
+import com.fatec.nopontobackend.model.IMarcaRepository;
+import com.fatec.nopontobackend.model.Marca;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;

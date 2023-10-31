@@ -1,4 +1,4 @@
-package com.fatec.noPontoBackend.model;
+package com.fatec.nopontobackend.model;
 
 import jakarta.persistence.*;
 import org.springframework.core.io.ClassPathResource;
@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @Entity
-public class Marca {
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,14 +17,14 @@ public class Marca {
     @Lob
     private byte[] imagem;
 
-    public Marca() {
+
+    public Item() {
     }
 
-    public Marca(String nome, String caminhoDaImagem) {
+    public Item(String nome, String caminhoDaImagem) {
         this.nome = nome;
         this.imagem = carregarImagem(caminhoDaImagem);
     }
-
 
     public Long getId() {
         return id;
@@ -50,14 +50,18 @@ public class Marca {
         this.imagem = imagem;
     }
 
+    public class ImagemNaoEncontradaException extends RuntimeException {
+        public ImagemNaoEncontradaException(String mensagem) {
+            super(mensagem);
+        }
+    }
     private byte[] carregarImagem(String caminhoDaImagem) {
         try {
             ClassPathResource resource = new ClassPathResource(caminhoDaImagem);
             Path imagePath = resource.getFile().toPath();
             return Files.readAllBytes(imagePath);
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao carregar imagem: " + e.getMessage());
+            throw new ImagemNaoEncontradaException("Erro ao carregar imagem: " + e.getMessage());
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package com.fatec.noPontoBackend.controller;
+package com.fatec.nopontobackend.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.fatec.noPontoBackend.model.Point;
-import com.fatec.noPontoBackend.service.IPointService;
+import com.fatec.nopontobackend.model.Point;
+import com.fatec.nopontobackend.service.IPointService;
 
 import java.util.List;
 import java.util.Optional;

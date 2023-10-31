@@ -1,7 +1,6 @@
-package com.fatec.noPontoBackend.controller;
+package com.fatec.nopontobackend.controller;
 
-import com.fatec.noPontoBackend.service.IItemService;
-import com.fatec.noPontoBackend.service.IMarcaService;
+import com.fatec.nopontobackend.service.IItemService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,18 +12,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/v1/marca")
-public class APIMarcaController {
-
+@RequestMapping("api/v1/itens")
+public class APIItemController {
     Logger logger = LogManager.getLogger(this.getClass());
 
     @Autowired
-    IMarcaService marcaService;
+    IItemService itemService;
 
     @CrossOrigin
     @GetMapping
     public ResponseEntity<Object> consultaTodos(){
         logger.info(">>>>>> apicontroller consulta todos");
-        return ResponseEntity.status(HttpStatus.OK).body(marcaService.consultaMarca());
+        return ResponseEntity.status(HttpStatus.OK).body(itemService.consultaItens());
     }
 }

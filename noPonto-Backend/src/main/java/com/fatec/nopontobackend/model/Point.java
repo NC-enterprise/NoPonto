@@ -1,4 +1,4 @@
-package com.fatec.noPontoBackend.model;
+package com.fatec.nopontobackend.model;
 import jakarta.persistence.*;
 import org.springframework.core.io.ClassPathResource;
 
@@ -154,13 +154,19 @@ public class Point {
         this.items = items;
     }
 
+    public class ImagemNaoEncontradaException extends RuntimeException {
+        public ImagemNaoEncontradaException(String mensagem) {
+            super(mensagem);
+        }
+    }
+
     private byte[] carregarImagem(String caminhoDaImagem) {
         try {
             ClassPathResource resource = new ClassPathResource(caminhoDaImagem);
             Path imagePath = resource.getFile().toPath();
             return Files.readAllBytes(imagePath);
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao carregar imagem: " + e.getMessage());
+            throw new ImagemNaoEncontradaException("Erro ao carregar imagem: " + e.getMessage());
         }
     }
 

@@ -1,7 +1,7 @@
-package com.fatec.noPontoBackend.service;
+package com.fatec.nopontobackend.service;
 
-import com.fatec.noPontoBackend.model.IMarcaRepository;
-import com.fatec.noPontoBackend.model.Marca;
+import com.fatec.nopontobackend.model.IMarcaRepository;
+import com.fatec.nopontobackend.model.Marca;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

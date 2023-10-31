@@ -1,6 +1,5 @@
-package com.fatec.noPontoBackend.model;
+package com.fatec.nopontobackend.model;
 
-import com.fatec.noPontoBackend.model.Point;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,10 +12,6 @@ import java.util.List;
 @Repository
 public interface IPointRepository extends JpaRepository<Point, Long> {
     public List<Point> findAllByNameIgnoreCaseContaining(String name);
-
-//    @Query("SELECT DISTINCT p FROM Point p JOIN p.items items " +
-//            "WHERE p.uf = :uf AND p.city = :city AND items.id IN :items")
-//    List<Point> findBy(@Param("uf") String uf, @Param("city") String city, @Param("items") List<Item> items);
 
     @Modifying
     @Transactional
