@@ -21,4 +21,5 @@ public interface IPointRepository extends JpaRepository<Point, Long> {
     List<Point> findByItemsIn(List<Long> materialIds);
 
     List<Point> findByNameContaining(String name);
+
 }
