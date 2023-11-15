@@ -161,6 +161,14 @@ function Point() {
   if (erro) {
     return <div>Erro ao acessar o endpoint da Api: {erro}</div>;
   }
+
+  // pesquisa
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className="bg-white sm:py-12 lg:py-16 ">
       <div>
@@ -228,6 +236,7 @@ function Point() {
                 aria-describedby="button-addon1"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
 
               {/* <!--Botão de pesquisa--> */}
