@@ -8,7 +8,7 @@ import '../../styles/leaflet.css'
 import pontoImage from '../../assets/ponto.png';
 
 
-export default function PartnerBrand() {
+export default function PartnerBrandRegistration() {
     const [ufs, setUfs] = useState([]);
     const [cities, setCities] = useState([]);
 

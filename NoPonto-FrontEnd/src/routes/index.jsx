@@ -8,7 +8,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import point from './point';
 import pagePoint from './pagePoint';
-import partnerBrand from './PartnerBrand';
+import partnerBrandRegistration from './partnerBrandRegistration';
 import pointRegistration from './pointRegistration';
 import dashboardRoutes from './dashboard';
 import pagePartnerBrand from './pagePartnerBrand';
@@ -27,7 +27,7 @@ import pagePartnerBrand from './pagePartnerBrand';
       ...home,
       ...point,
       ...pagePoint,
-      ...partnerBrand,
+      ...partnerBrandRegistration,
       ...pointRegistration,
       ...pagePartnerBrand
     ],

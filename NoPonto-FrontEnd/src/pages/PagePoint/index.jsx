@@ -160,31 +160,7 @@ function PagePoint() {
                         <LightBulbIcon className='mr-2 w-8 h-8' />
                         <NewspaperIcon className='mr-2 w-8 h-8' />
                         <Battery0Icon className='mr-2 w-8 h-8' />
-                    </div>
-
-                    {/* Comentários */}
-                    <div className="mt-8 mb-4 flex items-center text-base text-gray-600">
-                        <span className="ml-2">34 comentários</span></div>
-                    {comentarios.map(c => (
-                        <div key={c.id}>
-                            <p>Autor: {c.author}</p>
-                            <p>Comentário: {c.text}</p>
-                            <p>Data de Criação: {c.createdAt}</p>
-                        </div>
-                    ))}
-
-                    {/* Área para escrever e salvar um comentário */}
-                    <div className="mt-5">
-                        <label htmlFor='comentario'>aaa</label>
-                        <textarea
-                            id='comentario'
-                            name='comentario'
-                            placeholder="Escreva seu comentário..."
-                            value={newComment}
-                            onChange={handleCommentChange}
-                        />
-                        <button onClick={handleCommentRegistration}>Salvar Comentário</button>
-                    </div>
+                    </div>              
 
                     {/* Botão */}
 
@@ -204,8 +180,45 @@ function PagePoint() {
                             Entrar em contato
                         </button>
                     </div>
-                </div>
 
+                </div>
+            </div>
+
+            <div className=' bg-white mt-10 max-w-[768px] mx-auto w-full md:w-[768px]'>
+                <div className="px-6 py-6 mb-2">
+                     {/* Área para escrever e salvar um comentário */}        
+                     <div className="mt-5 space-y-4 border-b pb-4 border-colorMidGreen">
+                        <label htmlFor='comentario' className="block text-base font-semibold">Comentar</label>
+                        <textarea
+                            id='comentario'
+                            name='comentario'
+                            placeholder="Escreva seu comentário..."
+                            value={newComment}
+                            onChange={handleCommentChange}
+                            className="block w-full border rounded-md p-2"
+                        />
+                        <button
+                            onClick={handleCommentRegistration}
+                            className="self-end rounded-md border-2 border-colorMidGreen hover:bg-colorMidGreen hover:text-white text-black font-semibold py-2 px-4 text-sm"
+                        >
+                            Salvar Comentário
+                        </button>
+                    </div>
+                    {/* Comentários */}
+                    <div className="mt-6 mb-4 flex items-center">
+                        <span className="text-base font-semibold">Comentários</span>
+                    </div>
+                    {comentarios.map(c => (
+                        <div key={c.id} className='mt-2 border-b pb-2 border-colorLightGrey'>
+                            <div className='flex items-center justify-between mb-2'>
+                                <p className='text-sm font-semibold'>{c.author}</p>
+                                <p className='text-sm'>{c.createdAt}</p>
+                            </div>
+                            <p className='text-xs my-2'>{c.text}</p>
+
+                        </div>
+                    ))}
+                </div>
             </div>
 
         </main>
