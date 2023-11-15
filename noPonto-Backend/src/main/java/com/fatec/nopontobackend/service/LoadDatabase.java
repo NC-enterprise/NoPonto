@@ -35,8 +35,12 @@ public class LoadDatabase {
                     -23.704605121006573,  "R. Álvares Cabral, 1530 - Serraria", "Segunda a Sexta 08:00 - 18:00, Sábado 09:00 - 13:00",
                     "Ao utilizar nosso ponto de coleta de eletrônicos, lembre-se de trazer seus dispositivos eletrônicos antigos ou quebrados, garantindo que estejam livres de informações pessoais. Uma vez lá, deposite os itens no local apropriado indicado para a reciclagem adequada desses aparelhos.", itemIds);
 
+            Point ponto4 = new Point("images/fatec.png", "Fatec - Luigi Papaiz", "luigipapaiz@gmail.com", "11955653214","SP","Diadema", -46.6175414,
+                    -23.6732972,  "Av. Luiz Merenda, 443 - Campanário", "Segunda a Sexta 07:00 - 22:00, Sábado 07:00 - 22:00",
+                    "Ao utilizar nosso ponto de coleta de eletrônicos, lembre-se de trazer seus dispositivos eletrônicos antigos ou quebrados, garantindo que estejam livres de informações pessoais. Uma vez lá, deposite os itens no local apropriado indicado para a reciclagem adequada desses aparelhos.", itemIds);
+
             // Salve os pontos de coleta no repositório de pontos
-            repository.saveAll(Arrays.asList(ponto1, ponto2, ponto3));
+            repository.saveAll(Arrays.asList(ponto1, ponto2, ponto3, ponto4));
             logger.info(">>>>> loaddatabase -> cadastro de 3 pontos de coleta realizado.");
         };
     }
