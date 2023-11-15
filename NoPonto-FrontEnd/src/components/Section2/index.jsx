@@ -9,7 +9,7 @@ const Section2 = () => {
         <p className='pt-4 mt-2 text-lg'>
           Seja parte da mudança! Ao se tornar um parceiro e cadastrar sua loja, você ajuda a promover o descarte consciente e a preservação do meio ambiente. Além disso, ofereça recompensas em sua loja para aqueles que levarem produtos para reciclagem.
         </p>
-        <Link to="./partnerBrand">
+        <Link to="./partnerBrandRegistration">
           <button className='bg-transparent border-2 border-colorAccent2 text-white hover:bg-colorAccent2 w-[200px] rounded-md font-medium my-6 mx-auto md:mx-0 py-3'>Seja Nosso Parceiro</button>
         </Link>
       </div>

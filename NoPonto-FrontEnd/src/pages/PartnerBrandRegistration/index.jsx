@@ -288,7 +288,7 @@ export default function PartnerBrandRegistration() {
                                         <MapContainer
                                             center={initialPosition}
                                             zoom={14}
-                                            style={{ height: '330px', width: '100%' }}
+                                            style={{ height: '330px', width: '100%', zIndex: 1  }}
                                             whenCreated={mapInstance => (mapRef.current = mapInstance)}
                                             onLocationfound={e => {
                                                 const { lat, lng } = e.latlng;
