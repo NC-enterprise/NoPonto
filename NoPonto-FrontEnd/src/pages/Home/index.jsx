@@ -3,7 +3,7 @@ import Hero from '../../components/Hero';
 import Section from '../../components/Section';
 import Section2 from '../../components/Section2';
 import PartnerCarrossel from '../../components/PartnerCarrossel';
-
+import TeamSection from '../../components/TeamSection';
 function Home() {
   return (
     <div>
@@ -11,6 +11,7 @@ function Home() {
       <Section />
       <Section2 />
       <PartnerCarrossel />
+      <TeamSection />
     </div>
   );
 }
