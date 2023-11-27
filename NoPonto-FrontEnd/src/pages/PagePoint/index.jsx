@@ -3,6 +3,8 @@ import { ClockIcon, PhoneIcon, HomeIcon, DevicePhoneMobileIcon, LightBulbIcon, N
 import { useParams } from 'react-router-dom';
 import ConverteBase64ToImage from "../../utils/ConverteBase64ToImage";
 import { Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function PagePoint() {
     const { id } = useParams();
@@ -39,6 +41,7 @@ function PagePoint() {
             }
         };
         consulta();
+        
     }, [id]);
 
     React.useEffect(() => {
@@ -69,10 +72,11 @@ function PagePoint() {
     };
 
     const handleCommentRegistration = async () => {
+        toast.success("comentario cadastrado com sucesso!");
 
         try {
             const data = {
-                author: "Nome do Autor",
+                author: "undefined",
                 text: newComment,
                 createdAt: new Date().toISOString(),
                 pointId: id,
@@ -90,6 +94,13 @@ function PagePoint() {
                 throw new Error("Erro ao cadastrar o comentario.");
             }
             setMensagem("comentario cadastrado com sucesso!");
+            // Busca novamente os comentários da API
+        const responseComentarios = await fetch(`http://localhost:8080/api/v1/comentarios`);
+        if (!responseComentarios.ok) {
+            throw new Error("Erro ao buscar os comentarios.");
+        }
+        const dadosComentarios = await responseComentarios.json();
+        setComentarios(dadosComentarios);
         } catch (error) {
             setMensagem(
                 `${error} Erro ao cadastrar o comentario. Verifique os dados informados`
@@ -113,6 +124,7 @@ function PagePoint() {
 
     return (
         <main className="bg-colorLightGrey2 grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
+            <ToastContainer />
             <div className=' bg-white max-w-screen-md'>
                 <img
                     className="w-full"
